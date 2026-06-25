@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Estudio · PyE 2do Parcial</title>
+<style>
+:root{
+  --bg:#0f1419; --panel:#1a2230; --panel2:#222d3d; --ink:#e8edf4; --muted:#9fb0c3;
+  --accent:#4fa3ff; --accent2:#33d6a6; --warn:#ffb347; --bad:#ff6b6b; --good:#33d6a6;
+  --line:#2c3a4d; --shadow:0 6px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(135deg,#16243a,#1c3350);padding:22px 18px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:1.4rem}
+header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;z-index:30;background:#0f1419ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav .wrap{display:flex;gap:6px;padding:8px 16px}
+nav button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:8px 13px;border-radius:9px;cursor:pointer;font-size:.86rem;transition:.15s}
+nav button:hover{background:var(--panel2)}
+nav button.active{background:var(--accent);border-color:var(--accent);color:#04101e;font-weight:700}
+section{display:none;padding:24px 0 60px}
+section.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+h2{font-size:1.3rem;border-left:4px solid var(--accent);padding-left:12px;margin:28px 0 14px}
+h3{color:var(--accent2);margin:22px 0 8px;font-size:1.08rem}
+p,li{font-size:.96rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 11px;font-size:.74rem;color:var(--muted);margin:2px 4px 2px 0}
+.fml{background:#0c1118;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:'Cambria Math','Georgia',serif;font-size:1.05rem;overflow-x:auto;margin:8px 0}
+.fml b{color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--panel2);color:var(--accent)}
+.pill{font-size:.7rem;padding:1px 8px;border-radius:12px;font-weight:700}
+.pill.z{background:#15324f;color:#7ec4ff}.pill.t{background:#143a2e;color:#6fe0b6}.pill.p{background:#3a2c14;color:#ffce7a}
+.warn{border-left:4px solid var(--warn);background:#251e10;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.note{border-left:4px solid var(--accent);background:#11202e;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+ul{padding-left:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+/* plan */
+.day{border:1px solid var(--line);border-radius:14px;margin:14px 0;overflow:hidden}
+.day h4{margin:0;padding:14px 16px;background:var(--panel2);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:1.05rem}
+.day .body{padding:6px 16px 14px}
+.block{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.block:last-child{border:0}
+.block .t{min-width:96px;color:var(--accent);font-weight:700;font-size:.85rem}
+.chk{display:flex;align-items:flex-start;gap:9px;padding:7px 0;cursor:pointer}
+.chk input{margin-top:4px;width:17px;height:17px;accent-color:var(--accent2);cursor:pointer}
+.chk.done span{text-decoration:line-through;color:var(--muted)}
+/* flashcards */
+.fcwrap{perspective:1400px}
+.fc{background:none;border:none;width:100%;cursor:pointer;margin:10px 0}
+.fcInner{position:relative;transition:transform .5s;transform-style:preserve-3d;min-height:130px}
+.fc.flip .fcInner{transform:rotateX(180deg)}
+.fcFront,.fcBack{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:18px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line)}
+.fcFront{background:linear-gradient(135deg,#1d2a3d,#243650);font-weight:600;font-size:1rem}
+.fcBack{background:linear-gradient(135deg,#10241c,#16352a);transform:rotateX(180deg);color:#d7f5e9;font-size:.93rem;flex-direction:column}
+.fcHint{position:absolute;bottom:7px;right:12px;font-size:.66rem;color:var(--muted)}
+.deckbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.deckbar button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.8rem}
+/* quiz */
+.q{margin:16px 0;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+.q .stem{font-weight:600;margin-bottom:10px}
+.opt{display:block;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-radius:9px;cursor:pointer;transition:.12s;font-size:.92rem}
+.opt:hover{background:var(--panel2)}
+.opt.correct{background:#143a2e;border-color:var(--good);color:#aef0d4}
+.opt.wrong{background:#3a1717;border-color:var(--bad);color:#ffc2c2}
+.opt.sel{border-color:var(--accent)}
+.expl{margin-top:10px;font-size:.86rem;color:var(--muted);display:none;border-top:1px dashed var(--line);padding-top:9px}
+.expl.show{display:block}
+.score{position:sticky;bottom:0;background:#0f1419ee;backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-top:18px;font-weight:700;text-align:center}
+details{margin:8px 0;border:1px solid var(--line);border-radius:10px;padding:4px 12px;background:var(--panel)}
+summary{cursor:pointer;font-weight:600;padding:8px 0;color:var(--accent2)}
+.step{counter-increment:s;margin:9px 0;padding-left:34px;position:relative}
+.step:before{content:counter(s);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--accent);color:#04101e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+.steps{counter-reset:s}
+kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.8rem}
+.progbar{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin:6px 0}
+.progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.4s}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>📊 Centro de Estudio — Probabilidad y Estadística</h1>
+<p>2do Parcial · Unidades 6 a 9 · UTN FRC — Plan de 3 días para Hugo · Examen teórico-práctico</p>
+</div></header>
+
+<nav><div class="wrap">
+<button class="active" onclick="go('plan',this)">🗓️ Plan 3 días</button>
+<button onclick="go('u6',this)">U6 · Continuos</button>
+<button onclick="go('u7',this)">U7 · Muestreo</button>
+<button onclick="go('u8',this)">U8 · Estimación</button>
+<button onclick="go('u9',this)">U9 · Dócimas</button>
+<button onclick="go('flash',this)">🃏 Flashcards</button>
+<button onclick="go('quiz',this)">✅ Quiz</button>
+<button onclick="go('sim',this)">📝 Simulacro</button>
+<button onclick="go('formulario',this)">📐 Formulario</button>
+</div></nav>
+
+<div class="wrap">
+
+<!-- ============ PLAN ============ -->
+<section id="plan" class="active">
+<h2>Plan de estudio — 3 días, 4 a 6 h/día</h2>
+<div class="note">Estrategia <b>80/20</b>: lo que más rinde en el parcial es saber <b>qué modelo/distribución usar en cada caso</b> y aplicar la fórmula correcta. Por eso cada bloque combina: entender (15%) → practicar (60%) → autoevaluar (25%). Después de cada teoría, vas directo a flashcards y quiz. <b>Tildá cada bloque al terminar.</b></div>
+
+<div class="progbar"><i id="planProg"></i></div>
+<p id="planTxt" style="text-align:center;color:var(--muted);font-size:.85rem">0% completado</p>
+
+<div class="day">
+<h4 onclick="tg(this)">📅 DÍA 1 — Base continua + Muestreo <span>▾</span></h4>
+<div class="body">
+<p style="color:var(--muted);font-size:.85rem">Objetivo del día: dominar U6 (saber elegir entre Normal / Exponencial / Uniforme / t) y entender de dónde sale la distribución de la media (U7 + TCL).</p>
+<div class="block"><div class="t">Bloque 1<br>50 min</div><div data-chk>U6 Modelos continuos: leé la pestaña <b>U6</b> completa. Foco en el <b>árbol de decisión</b> (¿qué modelo es?) y en las 4 fórmulas clave.</div></div>
+<div class="block"><div class="t">Bloque 2<br>50 min</div><div data-chk>Practicá Normal y Exponencial: rehacé a mano los ejemplos del repaso (puntaje N(60;15), café uniforme, espera exponencial μ=8). Usá tabla Z o Infostat.</div></div>
+<div class="block"><div class="t">Descanso<br>15 min</div><div data-chk>Pausa real (caminar, agua). El cerebro consolida en los descansos.</div></div>
+<div class="block"><div class="t">Bloque 3<br>50 min</div><div data-chk>U7 Muestreo: tipos de muestreo (probabilístico vs no probabilístico) + distribución de la media muestral. Entendé σ(x̄)=σ/√n y el TCL.</div></div>
+<div class="block"><div class="t">Bloque 4<br>40 min</div><div data-chk>Flashcards mazo <b>U6 + U7</b> (pestaña Flashcards). Repetí hasta acertar todas 2 veces seguidas.</div></div>
+<div class="block"><div class="t">Cierre<br>20 min</div><div data-chk>Quiz: hacé las preguntas de <b>U6 y U7</b> en la pestaña Quiz. Anotá lo que fallaste.</div></div>
+</div></div>
+
+<div class="day">
+<h4 onclick="tg(this)">📅 DÍA 2 — Estimación + Dócimas <span>▾</span></h4>
+<div class="body">
+<p style="color:var(--muted);font-size:.85rem">Objetivo: el corazón inferencial del parcial. Intervalos de confianza y test de hipótesis. Acá se decide la nota.</p>
+<div class="block"><div class="t">Bloque 1<br>55 min</div><div data-chk>U8 Estimación: propiedades de estimadores + IC para la media (cuándo Z y cuándo t) + IC para proporción. Memorizá la estructura <b>estimador ± valor·error estándar</b>.</div></div>
+<div class="block"><div class="t">Bloque 2<br>45 min</div><div data-chk>Tamaño de muestra (media y proporción). Rehacé 2 ejercicios de despeje de n.</div></div>
+<div class="block"><div class="t">Descanso<br>15 min</div><div data-chk>Pausa.</div></div>
+<div class="block"><div class="t">Bloque 3<br>55 min</div><div data-chk>U9 Dócimas: las <b>5 etapas</b>, plantear H0/H1 (regla de la igualdad), tipos de dócima, errores tipo I y II. Leé los Tips de dócima.</div></div>
+<div class="block"><div class="t">Bloque 4<br>40 min</div><div data-chk>Dócima de media y proporción paso a paso. Curva OC y potencia (1−β).</div></div>
+<div class="block"><div class="t">Cierre<br>30 min</div><div data-chk>Flashcards mazo <b>U8 + U9</b> + Quiz de U8 y U9. Marcá los temas flojos para el día 3.</div></div>
+</div></div>
+
+<div class="day">
+<h4 onclick="tg(this)">📅 DÍA 3 — Integración + Simulacro <span>▾</span></h4>
+<div class="body">
+<p style="color:var(--muted);font-size:.85rem">Objetivo: intercalar todo (interleaving) y simular el examen real con tiempo.</p>
+<div class="block"><div class="t">Bloque 1<br>40 min</div><div data-chk>Repaso rápido del <b>Formulario</b> completo. Tapá las fórmulas e intentá reescribirlas de memoria.</div></div>
+<div class="block"><div class="t">Bloque 2<br>30 min</div><div data-chk>Repaso dirigido SOLO de lo que fallaste en días 1-2 (revisá tus notas).</div></div>
+<div class="block"><div class="t">Bloque 3<br>70 min</div><div data-chk>📝 <b>SIMULACRO completo</b> (pestaña Simulacro) con reloj, como en el examen. Sin mirar apuntes.</div></div>
+<div class="block"><div class="t">Descanso<br>15 min</div><div data-chk>Pausa.</div></div>
+<div class="block"><div class="t">Bloque 4<br>40 min</div><div data-chk>Corregí el simulacro con las soluciones. Reexplicá en voz alta (técnica Feynman) cada error.</div></div>
+<div class="block"><div class="t">Cierre<br>25 min</div><div data-chk>Pasada final de flashcards (todos los mazos en modo mezclado). Dormí bien: la memoria se fija durmiendo.</div></div>
+</div></div>
+
+<div class="card"><h3>⚙️ Cómo trabajar en cada bloque (recuerdo activo)</h3>
+<ul>
+<li><b>No releas pasivamente.</b> Leé una vez, cerrá, y escribí/decí lo que recordás. Eso es lo que entrena la memoria.</li>
+<li><b>Autoexplicación:</b> ante cada fórmula preguntate "¿por qué se usa esta y no otra?".</li>
+<li><b>Feynman:</b> si no podés explicarlo simple, no lo entendiste todavía — volvé a esa parte.</li>
+<li><b>Repetición espaciada:</b> los temas del día 1 se repiten en flashcards el día 3. Por eso el orden importa.</li>
+</ul></div>
+</section>
+
+<!-- ============ U6 ============ -->
+<section id="u6">
+<h2>U6 · Modelos especiales de probabilidad (variable continua)</h2>
+<div class="note"><b>Idea madre:</b> en variables <b>continuas</b> la probabilidad es un <b>área</b> bajo la curva. Por eso <b>P(x=valor)=0</b> y <b>&lt; es igual que ≤</b> (y &gt; igual que ≥). La probabilidad solo tiene sentido en un <b>intervalo</b>.</div>
+
+<h3>🌳 Árbol de decisión: ¿qué modelo uso?</h3>
+<div class="card">
+<table>
+<tr><th>Señal en el enunciado</th><th>Modelo</th><th>Qué calculás</th></tr>
+<tr><td>"valores entre a y b, todos igual de probables", densidad constante</td><td><b>Uniforme</b></td><td>Áreas por proporción de longitud</td></tr>
+<tr><td>"tiempo de espera / entre fallas / duración hasta un evento", dan una <b>media</b> (μ)</td><td><b>Exponencial</b></td><td>e^(−a/μ)</td></tr>
+<tr><td>Dan <b>media y desviación</b>, distribución acampanada (peso, altura, puntaje, ingreso...)</td><td><b>Normal</b></td><td>Estandarizar a Z + tabla/Infostat</td></tr>
+<tr><td>Normal pero <b>n pequeño (&lt;30) y σ desconocida</b> (se usa s)</td><td><b>t de Student</b></td><td>Igual que Normal pero con gl=n−1</td></tr>
+</table></div>
+
+<div class="grid2">
+<div class="card"><h3><span class="tag">1</span> Uniforme continua [a;b]</h3>
+<div class="fml">f(x) = <b>1/(b−a)</b></div>
+<div class="fml">P(x₁ ≤ x ≤ x₂) = <b>(x₂ − x₁)/(b − a)</b></div>
+<div class="fml">E(x) = <b>(a+b)/2</b> &nbsp;·&nbsp; V(x) = <b>(b−a)²/12</b></div>
+<p style="font-size:.85rem;color:var(--muted)">Ej: café entre [7;10] L. P(x≤8,8)=(8,8−7)/3=0,6. E=8,5; V=0,75.</p>
+</div>
+<div class="card"><h3><span class="tag">2</span> Exponencial (media μ)</h3>
+<div class="fml">P(x &gt; a) = <b>e^(−a/μ)</b></div>
+<div class="fml">P(x &lt; a) = <b>1 − e^(−a/μ)</b></div>
+<div class="fml">P(a &lt; x &lt; b) = <b>e^(−a/μ) − e^(−b/μ)</b></div>
+<p style="font-size:.85rem;color:var(--muted)">"Sin memoria": ya esperaste un rato → no cambia la prob. de esperar más. Ej μ=8: P(x&gt;16)=e^(−2)=0,1353.</p>
+</div>
+</div>
+
+<div class="card"><h3><span class="tag">3</span> Normal &nbsp; X ~ N(μ ; σ)</h3>
+<p>Campana <b>simétrica y mesocúrtica</b>; media=mediana=moda; área total=1; asintótica al eje x; rango (−∞,+∞).</p>
+<div class="fml">Estandarización: &nbsp; z = <b>(x − μ) / σ</b> &nbsp;&nbsp;→&nbsp;&nbsp; z ~ N(0 ; 1)</div>
+<div class="warn"><b>⚠️ En Infostat se ingresa la VARIANZA (σ²), no la desviación.</b> Si X~N(500;40), cargás media 500 y varianza 40²=1600.</div>
+<h3>Tres cálculos típicos</h3>
+<div class="steps">
+<div class="step"><b>P(x ≤ k):</b> directo en tabla/Infostat (área a la izquierda).</div>
+<div class="step"><b>P(x ≥ k) = 1 − P(x ≤ k).</b></div>
+<div class="step"><b>P(k₁ ≤ x ≤ k₂) = P(x ≤ k₂) − P(x ≤ k₁).</b></div>
+</div>
+<p style="font-size:.85rem"><b>Problema inverso</b> (dan la probabilidad, piden el valor k): buscás el z que deja esa área y despejás <b>x = μ + z·σ</b>.</p>
+<p style="font-size:.85rem"><b>"¿Cuántos de N?"</b> → probabilidad × N. <b>"¿Qué porcentaje?"</b> → probabilidad × 100.</p>
+<details><summary>Regla empírica (interpretación de la varianza)</summary>
+<p>En una Normal: <b>≈68%</b> de los datos caen en μ±1σ · <b>≈95%</b> en μ±2σ · <b>≈99,7%</b> en μ±3σ. El <b>puntaje típico</b> es justamente z (cuántas desviaciones está x de la media).</p></details>
+</div>
+
+<div class="card"><h3><span class="tag">4</span> t de Student</h3>
+<p>Se usa cuando la muestra es <b>pequeña (n&lt;30)</b> y <b>no se conoce σ</b> (se estima con s). Es como la Normal pero con <b>colas más anchas</b> (más incertidumbre). Depende de los <b>grados de libertad gl = n − 1</b>. A medida que n crece, se parece cada vez más a la Normal.</p>
+<div class="fml">gl = <b>n − 1</b> &nbsp;·&nbsp; simétrica respecto de 0 &nbsp;·&nbsp; E(t)=0</div>
+<p style="font-size:.85rem;color:var(--muted)">Ej: P(a &lt; t₁₁ &lt; 2,718)=0,09 con n=12 → P(t&lt;a)=0,90 → a=1,3634.</p>
+</div>
+
+<div class="warn"><b>Relación discretos ↔ Normal:</b> cuando una Binomial tiene n grande, se aproxima con la Normal (μ=np, σ=√(npq)). Es el puente entre la unidad de discretas y la Normal.</div>
+</section>
+
+<!-- ============ U7 ============ -->
+<section id="u7">
+<h2>U7 · Teoría del muestreo</h2>
+<div class="note"><b>Por qué muestrear:</b> estudiar toda la población suele ser caro/imposible. Tomamos una <b>muestra</b> y, con probabilidad, inferimos sobre la población.</div>
+
+<h3>Tipos de muestreo</h3>
+<div class="grid2">
+<div class="card"><h3>No probabilístico</h3><p>La selección NO es al azar → no se puede medir el error. Tipos:</p>
+<ul><li><b>De criterio:</b> el experto elige a dedo.</li><li><b>De la muestra disponible:</b> los que están a mano.</li><li><b>Por cuotas:</b> se llenan cupos por categoría, pero eligiendo a dedo dentro de cada uno.</li></ul></div>
+<div class="card"><h3>Probabilístico</h3><p>Cada elemento tiene probabilidad <b>conocida</b> de ser elegido → permite inferencia. Tipos:</p>
+<ul><li><b>Aleatorio simple:</b> todos igual de probables (sorteo).</li><li><b>Estratificado:</b> divido en estratos homogéneos y muestreo en cada uno.</li><li><b>Sistemático:</b> uno cada k elementos.</li><li><b>Por conglomerados:</b> elijo grupos completos (ej. barrios).</li></ul></div>
+</div>
+
+<h3>Distribución de la media muestral (x̄)</h3>
+<div class="card">
+<p>Si tomo muchas muestras de tamaño n y calculo el promedio de cada una, esos promedios forman una distribución con:</p>
+<div class="fml">E(x̄) = <b>μ</b> &nbsp;(la media de las medias = media poblacional → estimador insesgado)</div>
+<div class="fml">σ(x̄) = <b>σ/√n</b> &nbsp;·&nbsp; V(x̄) = <b>σ²/n</b> &nbsp;<span style="color:var(--muted);font-size:.8rem">(error estándar de la media)</span></div>
+<p style="font-size:.85rem">Para estandarizar la media: &nbsp; <b>z = (x̄ − μ)/(σ/√n)</b></p>
+<div class="warn"><b>Con / sin reposición:</b> con reposición (o población infinita) → σ(x̄)=σ/√n. <b>Sin reposición</b> en población finita se multiplica por el <b>factor de corrección</b> √[(N−n)/(N−1)].</div>
+</div>
+
+<h3>Distribución de la proporción muestral (p̂)</h3>
+<div class="card">
+<div class="fml">E(p̂) = <b>P</b> &nbsp;·&nbsp; σ(p̂) = <b>√[ P(1−P)/n ]</b></div>
+<p style="font-size:.85rem;color:var(--muted)">Mismo razonamiento que la media, pero con proporciones. Insesgado: la media de las p̂ = P.</p>
+</div>
+
+<div class="card"><h3>⭐ Ley de los grandes números & Teorema Central del Límite</h3>
+<ul>
+<li><b>Ley de los grandes números:</b> a mayor n, x̄ se acerca cada vez más a μ. (la muestra "se parece" más a la población).</li>
+<li><b>Teorema Central del Límite (TCL):</b> si <b>n &gt; 30</b>, la distribución de x̄ es <b>aproximadamente Normal</b>, <b>aunque la población no sea normal</b>. Por eso podemos usar Z en estimación e hipótesis con muestras grandes.</li>
+</ul>
+<div class="note">Esta es la <b>llave</b> que conecta U6, U8 y U9: gracias al TCL podemos usar la Normal para inferir.</div>
+</div>
+</section>
+
+<!-- ============ U8 ============ -->
+<section id="u8">
+<h2>U8 · Estimación estadística</h2>
+<div class="note"><b>Estimar</b> = usar datos de la muestra (estimador) para aproximar un parámetro poblacional desconocido (μ, P).</div>
+
+<div class="card"><h3>Propiedades de un buen estimador</h3>
+<table>
+<tr><th>Propiedad</th><th>Significado</th></tr>
+<tr><td><b>Insesgadez</b></td><td>En promedio da en el blanco: E(estimador)=parámetro. (x̄ es insesgado de μ).</td></tr>
+<tr><td><b>Eficiencia</b></td><td>Entre los insesgados, el de <b>menor varianza</b> es el más eficiente.</td></tr>
+<tr><td><b>Consistencia</b></td><td>Al crecer n, se acerca al parámetro (su error tiende a 0).</td></tr>
+<tr><td><b>Suficiencia</b></td><td>Aprovecha <b>toda</b> la información de la muestra sobre el parámetro.</td></tr>
+</table></div>
+
+<div class="card"><h3>Estimación puntual vs por intervalo</h3>
+<p><b>Puntual:</b> un solo número (x̄ estima μ, p̂ estima P). Limitación: casi nunca acierta exacto y no dice el margen de error. <b>Por intervalo:</b> un rango con un <b>nivel de confianza</b> (1−α), típicamente 90%, 95%, 99%.</p>
+<div class="fml">Estructura general: &nbsp; <b>estimador ± (valor crítico) × (error estándar)</b></div>
+</div>
+
+<h3>🌳 ¿Qué uso para el IC de la media? Z o t</h3>
+<div class="card">
+<table>
+<tr><th>Situación</th><th>Distribución</th><th>Fórmula del IC para μ</th></tr>
+<tr><td>σ conocida &nbsp;<b>o</b>&nbsp; n ≥ 30</td><td><span class="pill z">Z</span></td><td>x̄ ± z<sub>1−α/2</sub> · σ/√n</td></tr>
+<tr><td>σ desconocida &nbsp;<b>y</b>&nbsp; n &lt; 30</td><td><span class="pill t">t</span> (gl=n−1)</td><td>x̄ ± t<sub>1−α/2</sub> · s/√n</td></tr>
+</table>
+<div class="fml">IC proporción P: &nbsp; <b>p̂ ± z<sub>1−α/2</sub> · √[ p̂(1−p̂)/n ]</b></div>
+</div>
+
+<div class="card"><h3>Valores críticos de z más usados</h3>
+<table>
+<tr><th>Confianza 1−α</th><th>α</th><th>z<sub>1−α/2</sub></th></tr>
+<tr><td>90%</td><td>0,10</td><td><b>1,645</b></td></tr>
+<tr><td>95%</td><td>0,05</td><td><b>1,96</b></td></tr>
+<tr><td>99%</td><td>0,01</td><td><b>2,575</b></td></tr>
+</table>
+<p style="font-size:.82rem;color:var(--muted)">Memorizá estos tres: aparecen siempre en IC y dócimas.</p></div>
+
+<h3>Tamaño de muestra (despejás n)</h3>
+<div class="grid2">
+<div class="card"><h4 style="margin:0 0 6px">Para la media</h4>
+<div class="fml">n = <b>( z·σ / E )²</b></div>
+<p style="font-size:.84rem;color:var(--muted)">E = error máximo admitido (semi-amplitud del intervalo). Siempre se redondea <b>hacia arriba</b>.</p></div>
+<div class="card"><h4 style="margin:0 0 6px">Para la proporción</h4>
+<div class="fml">n = <b>z² · p̂(1−p̂) / E²</b></div>
+<p style="font-size:.84rem;color:var(--muted)">Si no hay estimación previa de p, se usa el peor caso <b>p=0,5</b> (p(1−p)=0,25).</p></div>
+</div>
+</section>
+
+<!-- ============ U9 ============ -->
+<section id="u9">
+<h2>U9 · Contraste / verificación de hipótesis (Dócimas)</h2>
+<div class="note"><b>Dócima</b> = test de hipótesis: una regla para <b>decidir</b>, con datos de la muestra, si rechazamos o no una afirmación sobre la población.</div>
+
+<div class="card"><h3>Plantear H₀ y H₁ — la regla de oro</h3>
+<ul>
+<li>🔑 <b>Toda expresión con la igualdad va en H₀</b> (=, ≤, ≥).</li>
+<li>🔑 <b>H₁ es lo que el investigador "sospecha"</b> y define el <b>tipo de dócima</b>.</li>
+</ul>
+<table>
+<tr><th>H₁ dice...</th><th>Tipo de dócima</th><th>Zona de rechazo</th></tr>
+<tr><td>μ &gt; valor ("mayor")</td><td>Lateral derecha</td><td>cola derecha</td></tr>
+<tr><td>μ &lt; valor ("menor")</td><td>Lateral izquierda</td><td>cola izquierda</td></tr>
+<tr><td>μ ≠ valor ("cambió/distinto")</td><td>Bilateral</td><td>las dos colas (α/2 c/u)</td></tr>
+</table></div>
+
+<div class="card"><h3>Errores y sus probabilidades</h3>
+<table>
+<tr><th></th><th>H₀ es verdadera</th><th>H₀ es falsa</th></tr>
+<tr><td><b>Rechazo H₀</b></td><td style="background:#3a1717">❌ Error tipo I (α)</td><td style="background:#143a2e">✔️ Correcto (potencia 1−β)</td></tr>
+<tr><td><b>No rechazo H₀</b></td><td style="background:#143a2e">✔️ Correcto</td><td style="background:#3a1717">❌ Error tipo II (β)</td></tr>
+</table>
+<ul>
+<li><b>α = nivel de significación</b> = P(error tipo I) = rechazar H₀ siendo verdadera. Lo fijás vos (0,05; 0,01...).</li>
+<li><b>β = P(error tipo II)</b> = no rechazar H₀ siendo falsa.</li>
+<li><b>Potencia = 1 − β</b> = capacidad de detectar que H₀ es falsa cuando lo es. ¡Más potencia es mejor!</li>
+</ul></div>
+
+<div class="card"><h3>Las 5 etapas de una dócima</h3>
+<div class="steps">
+<div class="step">Plantear <b>H₀ y H₁</b> (la igualdad en H₀; H₁ define el tipo).</div>
+<div class="step">Fijar el <b>nivel de significación α</b>.</div>
+<div class="step">Elegir el <b>estadístico de prueba</b> (Z o t) y calcular su valor con los datos.</div>
+<div class="step">Determinar la <b>zona de rechazo</b> / valor(es) crítico(s) según α y el tipo.</div>
+<div class="step"><b>Decidir:</b> si el estadístico cae en zona de rechazo → <b>rechazo H₀</b>; si no → no rechazo. Concluir en términos del problema.</div>
+</div></div>
+
+<h3>Estadísticos de prueba</h3>
+<div class="card">
+<div class="fml">Media (σ conocida o n≥30): &nbsp; z = <b>(x̄ − μ₀) / (σ/√n)</b></div>
+<div class="fml">Media (σ desconocida, n&lt;30): &nbsp; t = <b>(x̄ − μ₀) / (s/√n)</b> &nbsp; gl=n−1</div>
+<div class="fml">Proporción: &nbsp; z = <b>(p̂ − P₀) / √[ P₀(1−P₀)/n ]</b></div>
+<div class="warn"><b>Criterio del valor crítico:</b> bilateral → comparás |z| con z<sub>1−α/2</sub>. Lateral → comparás z con z<sub>1−α</sub> (con su signo). Si supera el crítico hacia la zona de rechazo → rechazo H₀.</div>
+</div>
+
+<div class="card"><h3>Curva OC y función de potencia</h3>
+<p>La <b>Curva Característica de Operación (OC)</b> grafica <b>β</b> (probabilidad de NO rechazar H₀) para distintos valores reales del parámetro. La <b>función de potencia</b> grafica <b>1−β</b>. Sirven para ver qué tan bueno es el test según cuánto se aleja la realidad de H₀.</p>
+<div class="note"><b>Dócima ↔ IC:</b> son dos caras de lo mismo. Un IC de 95% contiene los valores de μ que NO se rechazarían en una dócima bilateral con α=0,05.</div>
+<details><summary>Ejemplo de potencia (del material)</summary>
+<p>Salarios, n=50, σ²=102,42 → σ²(x̄)=102,42/50=2,0484. Con μ₀=136 y α=5%, el punto crítico x̄*=138,354. Para μ=139,46 la potencia es 1−β = P(x̄ &gt; 138,354) = <b>0,7801</b>. Es decir, hay 78% de chance de detectar correctamente que la media real es mayor.</p></details>
+</div>
+</section>
+
+<!-- ============ FLASHCARDS ============ -->
+<section id="flash">
+<h2>🃏 Flashcards — recuerdo activo</h2>
+<p style="color:var(--muted);font-size:.9rem">Tocá la tarjeta para girarla. Pensá la respuesta ANTES de girar. Filtrá por mazo:</p>
+<div class="deckbar">
+<button onclick="deck('all',this)" class="active">Todos</button>
+<button onclick="deck('U6',this)">U6</button>
+<button onclick="deck('U7',this)">U7</button>
+<button onclick="deck('U8',this)">U8</button>
+<button onclick="deck('U9',this)">U9</button>
+<button onclick="shuffleCards()">🔀 Mezclar</button>
+</div>
+<div id="cards" class="fcwrap"></div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section id="quiz">
+<h2>✅ Quiz autoevaluable</h2>
+<p style="color:var(--muted);font-size:.9rem">Elegí una opción; te marca al instante si está bien o mal y por qué. Hay preguntas de las 4 unidades.</p>
+<div id="quizBox"></div>
+<div class="score" id="quizScore">Respondidas: 0 · Correctas: 0</div>
+</section>
+
+<!-- ============ SIMULACRO ============ -->
+<section id="sim">
+<h2>📝 Simulacro de examen (con corrección)</h2>
+<div class="warn"><b>Modo examen:</b> poné <b>70 minutos</b> de reloj, calculadora + tabla Z/t (o Infostat) y resolvé sin mirar apuntes. Recién después abrí cada solución.</div>
+<div class="card" style="text-align:center">
+<div id="timer" style="font-size:2.2rem;font-weight:800;color:var(--accent)">70:00</div>
+<button class="opt" style="display:inline-block;width:auto;padding:8px 20px" onclick="startTimer()">▶ Iniciar reloj</button>
+<button class="opt" style="display:inline-block;width:auto;padding:8px 20px" onclick="stopTimer()">⏸ Pausar</button>
+</div>
+
+<div class="card"><h3>Ejercicio 1 — Normal (U6)</h3>
+<p>La duración de unas baterías es X ~ N(μ=500 h; σ=40 h).<br>
+a) P(una batería dure más de 560 h).<br>
+b) En una muestra de 120 baterías, P(la duración promedio sea menor que 505 h).</p>
+<details><summary>Ver solución</summary>
+<p><b>a)</b> z=(560−500)/40=1,5 → P(x&gt;560)=1−P(z&lt;1,5)=1−0,9332=<b>0,0668</b>.</p>
+<p><b>b)</b> Es la <b>media muestral</b> (U7): σ(x̄)=40/√120=3,65. z=(505−500)/3,65=1,37 → P(x̄&lt;505)=P(z&lt;1,37)=<b>0,9147</b>.</p>
+<p style="color:var(--accent2)">💡 Clave: distinguir "una batería" (σ) de "promedio de 120" (σ/√n).</p></details></div>
+
+<div class="card"><h3>Ejercicio 2 — Exponencial (U6)</h3>
+<p>El tiempo de espera de un pedido es exponencial con media μ=8 min.<br>
+a) P(esperar más de 16 min). b) P(llegue en menos de 4 min). c) % que espera entre 8 y 10 min.</p>
+<details><summary>Ver solución</summary>
+<p><b>a)</b> P(x&gt;16)=e^(−16/8)=e^(−2)=<b>0,1353</b>.</p>
+<p><b>b)</b> P(x&lt;4)=1−e^(−4/8)=1−e^(−0,5)=1−0,6065=<b>0,3935</b>.</p>
+<p><b>c)</b> P(8&lt;x&lt;10)=e^(−1)−e^(−1,25)=0,3679−0,2865=0,0814 → <b>8,14%</b>.</p></details></div>
+
+<div class="card"><h3>Ejercicio 3 — Uniforme (U6)</h3>
+<p>Una máquina sirve café uniforme en [7;10] L. a) P(x≤8,8). b) P(7,4≤x≤9,5). c) E(x) y V(x).</p>
+<details><summary>Ver solución</summary>
+<p><b>a)</b> (8,8−7)/(10−7)=1,8/3=<b>0,6</b>.</p>
+<p><b>b)</b> (9,5−7,4)/3=2,1/3=<b>0,7</b>.</p>
+<p><b>c)</b> E=(7+10)/2=<b>8,5</b>; V=(10−7)²/12=9/12=<b>0,75</b>.</p></details></div>
+
+<div class="card"><h3>Ejercicio 4 — Intervalo de confianza para la media (U8)</h3>
+<p>Muestra de n=64 lámparas, x̄=1200 h, σ=100 h (conocida). Construir el IC del 95% para μ.</p>
+<details><summary>Ver solución</summary>
+<p>n≥30 y σ conocida → <b>Z</b>. z<sub>0,975</sub>=1,96. Error estándar=σ/√n=100/8=12,5.</p>
+<p>IC = 1200 ± 1,96·12,5 = 1200 ± 24,5 → <b>[1175,5 ; 1224,5] h</b>.</p>
+<p style="color:var(--accent2)">💡 Interpretación: con 95% de confianza, μ está entre 1175,5 y 1224,5 h.</p></details></div>
+
+<div class="card"><h3>Ejercicio 5 — IC con t de Student (U8)</h3>
+<p>n=16, x̄=52, s=8 (σ desconocida). IC del 95% para μ. (t<sub>0,975 ; 15gl</sub>=2,131)</p>
+<details><summary>Ver solución</summary>
+<p>n&lt;30 y σ desconocida → <b>t</b>, gl=15. Error estándar=s/√n=8/4=2.</p>
+<p>IC = 52 ± 2,131·2 = 52 ± 4,262 → <b>[47,74 ; 56,26]</b>.</p></details></div>
+
+<div class="card"><h3>Ejercicio 6 — Tamaño de muestra (U8)</h3>
+<p>Se quiere estimar una proporción con error máximo E=0,04 y confianza 95%, sin estimación previa de p. ¿Qué n se necesita?</p>
+<details><summary>Ver solución</summary>
+<p>Sin info previa → p=0,5 (peor caso). z=1,96.</p>
+<p>n = z²·p(1−p)/E² = (1,96)²·0,25/(0,04)² = 3,8416·0,25/0,0016 = 0,9604/0,0016 = 600,25 → <b>n=601</b> (redondeo hacia arriba).</p></details></div>
+
+<div class="card"><h3>Ejercicio 7 — Dócima para la media (U9)</h3>
+<p>Se afirma que el contenido medio de un envase es μ=500 g. Una muestra de n=36 da x̄=494 g, con σ=15 g. ¿Hay evidencia, al 5%, de que el contenido cambió?</p>
+<details><summary>Ver solución</summary>
+<p><b>1)</b> H₀: μ=500 · H₁: μ≠500 (bilateral, "cambió").</p>
+<p><b>2)</b> α=0,05.</p>
+<p><b>3)</b> z=(494−500)/(15/√36)=(−6)/(2,5)=<b>−2,4</b>.</p>
+<p><b>4)</b> Crítico bilateral: ±1,96.</p>
+<p><b>5)</b> |−2,4|=2,4 &gt; 1,96 → cae en zona de rechazo → <b>se rechaza H₀</b>. Hay evidencia al 5% de que el contenido medio cambió (es distinto de 500 g).</p></details></div>
+
+<div class="card"><h3>Ejercicio 8 — Dócima para proporción (U9)</h3>
+<p>Un proveedor afirma que a lo sumo el 5% de las piezas son defectuosas. En n=400 se hallan 28 defectuosas (p̂=0,07). Al 5%, ¿se puede rechazar su afirmación (sospecha: es mayor)?</p>
+<details><summary>Ver solución</summary>
+<p><b>1)</b> H₀: P≤0,05 · H₁: P&gt;0,05 (lateral derecha).</p>
+<p><b>2)</b> α=0,05.</p>
+<p><b>3)</b> z=(0,07−0,05)/√(0,05·0,95/400)=0,02/√(0,0475/400)=0,02/√0,00011875=0,02/0,0109=<b>1,835</b>.</p>
+<p><b>4)</b> Crítico lateral derecho: z<sub>0,95</sub>=1,645.</p>
+<p><b>5)</b> 1,835 &gt; 1,645 → <b>se rechaza H₀</b>. Al 5% hay evidencia de que la proporción de defectuosas supera el 5%.</p></details></div>
+</section>
+
+<!-- ============ FORMULARIO ============ -->
+<section id="formulario">
+<h2>📐 Formulario maestro (todo en una pantalla)</h2>
+<p style="color:var(--muted);font-size:.88rem">Imprimí o tené abierto esto mientras practicás. También te dejé un PDF aparte para llevar.</p>
+
+<div class="card"><h3>U6 · Modelos continuos</h3>
+<div class="fml">Uniforme [a;b]: f=1/(b−a) · P=(x₂−x₁)/(b−a) · E=(a+b)/2 · V=(b−a)²/12</div>
+<div class="fml">Exponencial(μ): P(x&gt;a)=e^(−a/μ) · P(x&lt;a)=1−e^(−a/μ) · P(a&lt;x&lt;b)=e^(−a/μ)−e^(−b/μ)</div>
+<div class="fml">Normal: z=(x−μ)/σ · P(x≥k)=1−P(x≤k) · inverso: x=μ+z·σ · (Infostat: cargar σ²)</div>
+<div class="fml">t Student: gl=n−1 (n&lt;30 y σ desconocida)</div>
+</div>
+
+<div class="card"><h3>U7 · Muestreo</h3>
+<div class="fml">Media muestral: E(x̄)=μ · σ(x̄)=σ/√n · z=(x̄−μ)/(σ/√n)</div>
+<div class="fml">Sin reposición (pob. finita): σ(x̄)=σ/√n · √[(N−n)/(N−1)]</div>
+<div class="fml">Proporción muestral: E(p̂)=P · σ(p̂)=√[P(1−P)/n]</div>
+<div class="fml">TCL: n&gt;30 ⇒ x̄ ≈ Normal (aunque la población no lo sea)</div>
+</div>
+
+<div class="card"><h3>U8 · Estimación (IC y n)</h3>
+<div class="fml">IC media (Z, σ conocida/n≥30): x̄ ± z<sub>1−α/2</sub>·σ/√n</div>
+<div class="fml">IC media (t, σ desc. y n&lt;30): x̄ ± t<sub>1−α/2</sub>·s/√n</div>
+<div class="fml">IC proporción: p̂ ± z<sub>1−α/2</sub>·√[p̂(1−p̂)/n]</div>
+<div class="fml">n media = (z·σ/E)² · n prop = z²·p(1−p)/E² (p=0,5 si no hay dato)</div>
+<div class="fml">z: 90%→1,645 · 95%→1,96 · 99%→2,575</div>
+</div>
+
+<div class="card"><h3>U9 · Dócimas</h3>
+<div class="fml">Igualdad → H₀ · H₁ define el tipo (mayor=der · menor=izq · distinto=bilateral)</div>
+<div class="fml">z media=(x̄−μ₀)/(σ/√n) · t media=(x̄−μ₀)/(s/√n)</div>
+<div class="fml">z proporción=(p̂−P₀)/√[P₀(1−P₀)/n]</div>
+<div class="fml">α=P(error I) · β=P(error II) · Potencia=1−β</div>
+<div class="fml">Bilateral: rechazo si |estadístico|&gt;crítico · Lateral: según signo</div>
+</div>
+
+<div class="card"><h3>🖥️ Guía rápida de Infostat</h3>
+<ul style="font-size:.9rem">
+<li><b>Probabilidades:</b> Estadísticas → Probabilidades y cuantiles → elegir distribución (Normal: media y <b>varianza</b>; t: grados de libertad).</li>
+<li><b>Problema inverso (dan prob., piden valor):</b> misma ventana, pestaña de cuantiles.</li>
+<li><b>Probabilidad "entre":</b> Aplicaciones → Didácticas → Gráficos de funciones de densidad → opción "entre" (y "Complementario" para las dos colas).</li>
+<li><b>Recordá:</b> en Normal y en la media muestral, Infostat pide <b>varianza</b> (σ² o σ²/n), no desviación.</li>
+</ul>
+</div>
+</section>
+
+</div>
+
+<script>
+/* ---------- nav ---------- */
+function go(id,btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function tg(h){const b=h.nextElementSibling;b.style.display=b.style.display==='none'?'block':'none';}
+
+/* ---------- plan checkboxes ---------- */
+document.querySelectorAll('[data-chk]').forEach((d,i)=>{
+  d.classList.add('chk');d.style.cursor='pointer';
+  const txt=d.innerHTML;
+  d.innerHTML='<input type="checkbox"><span>'+txt+'</span>';
+  const cb=d.querySelector('input');
+  cb.addEventListener('change',()=>{d.classList.toggle('done',cb.checked);planProg();});
+});
+function planProg(){
+  const all=document.querySelectorAll('[data-chk] input');
+  const done=document.querySelectorAll('[data-chk] input:checked').length;
+  const pct=Math.round(done/all.length*100);
+  document.getElementById('planProg').style.width=pct+'%';
+  document.getElementById('planTxt').textContent=pct+'% completado ('+done+'/'+all.length+' bloques)';
+}
+planProg();
+
+/* ---------- flashcards ---------- */
+const FC=[
+ ['U6','¿Cuándo uso el modelo Exponencial?','Cuando dan la MEDIA de un tiempo de espera / entre eventos / duración. P(x>a)=e^(−a/μ).'],
+ ['U6','En continuas, ¿cuánto vale P(x = un valor exacto)?','0. La probabilidad es área; por eso < equivale a ≤.'],
+ ['U6','Uniforme [a;b]: E(x) y V(x)','E=(a+b)/2 · V=(b−a)²/12'],
+ ['U6','Normal: fórmula de estandarización','z=(x−μ)/σ → z~N(0;1)'],
+ ['U6','⚠️ ¿Qué se carga en Infostat para una Normal?','La VARIANZA (σ²), no la desviación. Ej N(500;40)→varianza 1600.'],
+ ['U6','¿Cuándo uso t de Student en vez de Normal?','Muestra pequeña (n<30) Y σ desconocida (se usa s). gl=n−1.'],
+ ['U6','Regla empírica (68-95-99,7)','μ±1σ≈68% · μ±2σ≈95% · μ±3σ≈99,7%'],
+ ['U6','P(x≥k) en una Normal','1 − P(x≤k)'],
+ ['U7','σ de la media muestral','σ(x̄)=σ/√n (error estándar). V(x̄)=σ²/n.'],
+ ['U7','¿Qué dice el Teorema Central del Límite?','Si n>30, x̄ es aprox. Normal aunque la población no lo sea.'],
+ ['U7','E(x̄) = ?','μ (la media muestral es estimador insesgado de la media poblacional).'],
+ ['U7','Muestreo probabilístico: nombrá 4 tipos','Aleatorio simple, estratificado, sistemático, conglomerados.'],
+ ['U7','Muestreo NO probabilístico: tipos','De criterio, de la muestra disponible, por cuotas.'],
+ ['U7','σ de la proporción muestral','σ(p̂)=√[P(1−P)/n]'],
+ ['U7','Factor de corrección (sin reposición)','√[(N−n)/(N−1)] multiplica a σ/√n.'],
+ ['U8','4 propiedades de un buen estimador','Insesgadez, Eficiencia, Consistencia, Suficiencia.'],
+ ['U8','IC media con σ conocida o n≥30','x̄ ± z₁₋α/₂ · σ/√n (uso Z).'],
+ ['U8','IC media con σ desconocida y n<30','x̄ ± t₁₋α/₂ · s/√n (uso t, gl=n−1).'],
+ ['U8','IC para proporción','p̂ ± z₁₋α/₂ · √[p̂(1−p̂)/n]'],
+ ['U8','z para 90/95/99% de confianza','1,645 · 1,96 · 2,575'],
+ ['U8','Tamaño de muestra para la media','n=(z·σ/E)²  (redondear hacia arriba).'],
+ ['U8','Tamaño de muestra para proporción (sin dato de p)','n=z²·0,25/E²  (uso p=0,5, peor caso).'],
+ ['U9','¿Dónde va la igualdad, H₀ o H₁?','Siempre en H₀ (=, ≤, ≥). H₁ es la sospecha y define el tipo.'],
+ ['U9','H₁: μ ≠ valor → ¿qué tipo de dócima?','Bilateral (zona de rechazo en las dos colas, α/2 c/u).'],
+ ['U9','¿Qué es el error tipo I y su probabilidad?','Rechazar H₀ siendo verdadera. P=α (nivel de significación).'],
+ ['U9','¿Qué es el error tipo II?','No rechazar H₀ siendo falsa. P=β.'],
+ ['U9','Potencia de la dócima','1 − β. Probabilidad de rechazar H₀ cuando es falsa (detectar lo real).'],
+ ['U9','Estadístico de prueba para la media (σ conocida)','z=(x̄−μ₀)/(σ/√n)'],
+ ['U9','Estadístico de prueba para proporción','z=(p̂−P₀)/√[P₀(1−P₀)/n]'],
+ ['U9','Las 5 etapas de una dócima','1)H₀/H₁ 2)fijar α 3)estadístico 4)zona de rechazo 5)decidir y concluir.'],
+];
+let curDeck='all';
+function renderCards(list){
+  const c=document.getElementById('cards');c.innerHTML='';
+  list.forEach(f=>{
+    const d=document.createElement('div');d.className='fc';
+    d.innerHTML='<div class="fcInner"><div class="fcFront"><span class="tag">'+f[0]+'</span>&nbsp;'+f[1]+'<span class="fcHint">tocá para girar</span></div><div class="fcBack">'+f[2]+'</div></div>';
+    d.onclick=()=>d.classList.toggle('flip');
+    c.appendChild(d);
+  });
+}
+function deck(d,btn){
+  curDeck=d;
+  document.querySelectorAll('#flash .deckbar button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderCards(d==='all'?FC:FC.filter(f=>f[0]===d));
+}
+function shuffleCards(){
+  const base=curDeck==='all'?[...FC]:FC.filter(f=>f[0]===curDeck);
+  for(let i=base.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[base[i],base[j]]=[base[j],base[i]];}
+  renderCards(base);
+}
+renderCards(FC);
+
+/* ---------- quiz ---------- */
+const QZ=[
+ ['U6','En un modelo continuo, P(x < 90) comparado con P(x ≤ 90) es...',['Mayor','Menor','Igual','No se puede saber'],2,'En continuas P(x=valor)=0, por eso < y ≤ dan lo mismo.'],
+ ['U6','X~N(60;15). Para hallar P(x≤90) estandarizo con z =',['(90−60)/15 = 2','(90−15)/60','(60−90)/15','90/15'],0,'z=(x−μ)/σ=(90−60)/15=2 → P(z≤2)=0,9772.'],
+ ['U6','Tiempo de espera exponencial con μ=8. P(x>16)=',['e^(−2)=0,1353','e^(−8)','1−e^(−2)','0,5'],0,'P(x>a)=e^(−a/μ)=e^(−16/8)=e^(−2)=0,1353.'],
+ ['U6','¿Cuándo corresponde usar la t de Student?',['Siempre que sea continua','n grande y σ conocida','n<30 y σ desconocida','Solo para proporciones'],2,'t: muestra pequeña (n<30) y σ desconocida (se estima con s). gl=n−1.'],
+ ['U6','Uniforme en [7;10]: la varianza V(x) es',['1,5','0,75','3','8,5'],1,'V=(b−a)²/12=(3)²/12=9/12=0,75.'],
+ ['U7','El error estándar de la media muestral σ(x̄) es',['σ·√n','σ/n','σ/√n','σ²/n'],2,'σ(x̄)=σ/√n. (La varianza de x̄ es σ²/n).'],
+ ['U7','El Teorema Central del Límite garantiza que, si n>30,',['la población es normal','x̄ es aprox. normal aunque la población no lo sea','σ disminuye','p̂=P siempre'],1,'El TCL: la distribución de x̄ tiende a Normal con n>30, sin importar la forma poblacional.'],
+ ['U7','¿Cuál es un muestreo NO probabilístico?',['Aleatorio simple','Estratificado','Por cuotas','Sistemático'],2,'Por cuotas, de criterio y de muestra disponible son no probabilísticos.'],
+ ['U7','E(p̂), la esperanza de la proporción muestral, es igual a',['n·P','P','P(1−P)','0'],1,'p̂ es insesgado: E(p̂)=P.'],
+ ['U8','¿Cuál NO es una propiedad de un buen estimador?',['Insesgadez','Eficiencia','Consistencia','Normalidad'],3,'Las propiedades son insesgadez, eficiencia, consistencia y suficiencia.'],
+ ['U8','Para un IC de la media con n=64 y σ conocida uso',['t de Student','Z (normal)','Exponencial','Uniforme'],1,'σ conocida y/o n≥30 → distribución Z.'],
+ ['U8','El valor z para un nivel de confianza del 95% es',['1,645','1,96','2,575','2,33'],1,'95% → z₁₋α/₂ = 1,96. (90%→1,645; 99%→2,575).'],
+ ['U8','Tamaño de muestra para proporción sin estimación previa de p usa',['p=1','p=0','p=0,5','p=0,1'],2,'Sin dato previo se usa el peor caso p=0,5 (maximiza p(1−p)=0,25).'],
+ ['U8','La estructura general de un intervalo de confianza es',['estimador × error','estimador ± valor crítico × error estándar','parámetro ± α','media ± varianza'],1,'estimador ± (valor crítico)·(error estándar).'],
+ ['U9','La afirmación "el gasto promedio es a lo sumo $30000" se plantea como',['H₀: μ ≤ 30000','H₁: μ ≤ 30000','H₀: μ > 30000','H₁: μ = 30000'],0,'La igualdad (≤) va en H₀. La sospecha "es mayor" sería H₁: μ>30000 (lateral derecha).'],
+ ['U9','Si H₁: μ ≠ valor, la dócima es',['Lateral derecha','Lateral izquierda','Bilateral','No es dócima'],2,'"Distinto/cambió" → bilateral, zona de rechazo repartida en ambas colas.'],
+ ['U9','El error tipo I consiste en',['No rechazar H₀ siendo falsa','Rechazar H₀ siendo verdadera','Aceptar H₁ siendo verdadera','Aumentar n'],1,'Error tipo I = rechazar H₀ verdadera; su probabilidad es α.'],
+ ['U9','La potencia de una dócima es',['α','β','1−β','1−α'],2,'Potencia=1−β: probabilidad de rechazar H₀ cuando efectivamente es falsa.'],
+ ['U9','Estadístico de prueba para la media con σ conocida',['(x̄−μ₀)/(σ/√n)','(x̄−μ₀)/σ','(p̂−P₀)/√(P₀q₀/n)','(x̄−μ₀)·√n'],0,'z=(x̄−μ₀)/(σ/√n).'],
+ ['U9','En una dócima bilateral al 5% rechazo H₀ si',['z > 1,645','|z| > 1,96','z < 0','|z| < 1,96'],1,'Bilateral 5%: crítico ±1,96; rechazo si |z|>1,96.'],
+];
+const qb=document.getElementById('quizBox');
+let answered=0,correct=0;
+QZ.forEach((q,i)=>{
+  const d=document.createElement('div');d.className='q';
+  let h='<div class="stem"><span class="tag">'+q[0]+'</span> '+(i+1)+'. '+q[1]+'</div>';
+  q[2].forEach((o,j)=>{h+='<label class="opt" data-q="'+i+'" data-o="'+j+'">'+o+'</label>';});
+  h+='<div class="expl" id="ex'+i+'">'+q[4]+'</div>';
+  d.innerHTML=h;qb.appendChild(d);
+});
+let done={};
+document.querySelectorAll('.opt[data-q]').forEach(o=>{
+  o.addEventListener('click',()=>{
+    const qi=+o.dataset.q, oi=+o.dataset.o, right=QZ[qi][3];
+    if(done[qi])return;done[qi]=true;answered++;
+    const opts=document.querySelectorAll('.opt[data-q="'+qi+'"]');
+    opts.forEach(x=>{if(+x.dataset.o===right)x.classList.add('correct');});
+    if(oi===right){correct++;}else{o.classList.add('wrong');}
+    document.getElementById('ex'+qi).classList.add('show');
+    document.getElementById('quizScore').textContent='Respondidas: '+answered+'/'+QZ.length+' · Correctas: '+correct+'  ('+Math.round(correct/answered*100)+'%)';
+  });
+});
+
+/* ---------- timer ---------- */
+let tT=70*60,tInt=null;
+function paint(){const m=String(Math.floor(tT/60)).padStart(2,'0'),s=String(tT%60).padStart(2,'0');document.getElementById('timer').textContent=m+':'+s;}
+function startTimer(){if(tInt)return;tInt=setInterval(()=>{if(tT>0){tT--;paint();}else{clearInterval(tInt);tInt=null;document.getElementById('timer').textContent='¡Tiempo!';}},1000);}
+function stopTimer(){clearInterval(tInt);tInt=null;}
+</script>
+</body>
+</html>

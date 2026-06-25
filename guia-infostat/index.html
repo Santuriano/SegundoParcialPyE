@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía InfoStat · PyE 2do Parcial</title>
+<style>
+:root{--bg:#0f1419;--panel:#1a2230;--panel2:#222d3d;--ink:#e8edf4;--muted:#9fb0c3;--accent:#4fa3ff;--accent2:#33d6a6;--warn:#ffb347;--bad:#ff6b6b;--line:#2c3a4d}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:linear-gradient(135deg,#16243a,#1c3350);padding:22px 18px;border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:1.4rem}header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;z-index:30;background:#0f1419ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+nav .wrap{display:flex;gap:6px;padding:8px 16px}
+nav a{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:7px 12px;border-radius:9px;cursor:pointer;font-size:.84rem;text-decoration:none}
+nav a:hover{background:var(--panel2)}
+h2{font-size:1.25rem;border-left:4px solid var(--accent);padding-left:12px;margin:34px 0 14px;scroll-margin-top:60px}
+h3{color:var(--accent2);margin:20px 0 8px;font-size:1.05rem}
+p,li{font-size:.95rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.path{display:inline-block;background:#0c1118;border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-family:'Consolas',monospace;font-size:.86rem;color:var(--accent2)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+th{background:var(--panel2);color:var(--accent)}
+.warn{border-left:4px solid var(--warn);background:#251e10;padding:11px 15px;border-radius:0 10px 10px 0;margin:13px 0}
+.bad{border-left:4px solid var(--bad);background:#2a1414;padding:11px 15px;border-radius:0 10px 10px 0;margin:13px 0}
+.ok{border-left:4px solid var(--accent2);background:#10241c;padding:11px 15px;border-radius:0 10px 10px 0;margin:13px 0}
+.note{border-left:4px solid var(--accent);background:#11202e;padding:11px 15px;border-radius:0 10px 10px 0;margin:13px 0}
+.steps{counter-reset:s}
+.step{counter-increment:s;margin:9px 0;padding-left:36px;position:relative}
+.step:before{content:counter(s);position:absolute;left:0;top:0;width:25px;height:25px;background:var(--accent);color:#04101e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem}
+kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:.82rem;font-family:monospace}
+/* mock dialog */
+.dlg{max-width:430px;border:1px solid #7a8aa0;border-radius:5px;background:#ece9e3;color:#1a1a1a;margin:14px auto;font-size:.8rem;box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.dlg .bar{background:linear-gradient(#f3f1ec,#d9d5cd);padding:5px 9px;border-bottom:1px solid #bbb;font-weight:600;font-size:.78rem}
+.dlg .bd{display:flex;padding:10px;gap:10px}
+.dlg .distlist{border:1px solid #b5b5b5;background:#fff;border-radius:3px;padding:6px 8px;width:46%;font-size:.74rem;line-height:1.5}
+.dlg .distlist b{color:#0a58a8}
+.dlg .right{flex:1;font-size:.76rem}
+.dlg .fld{margin:3px 0}
+.dlg .fld input{width:54px;border:1px solid #888;background:#fff;padding:1px 4px;font-size:.74rem}
+.dlg .out{margin:5px 0}
+.dlg .out span{display:inline-block;border:1px solid #aaa;background:#f6f6f6;border-radius:3px;padding:2px 6px;min-width:90px;color:#0a6b3b;font-weight:600}
+.dlg .lbl{color:#444;font-size:.72rem}
+.dlg .btn{display:inline-block;background:linear-gradient(#fff,#dcdcdc);border:1px solid #999;border-radius:4px;padding:3px 12px;margin-top:6px}
+.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 10px;font-size:.72rem;color:var(--muted);margin:2px 4px 2px 0}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:6px 0}
+.chk input{margin-top:4px;width:16px;height:16px;accent-color:var(--accent2)}
+a.inl{color:var(--accent)}
+.big{font-size:1.5rem;color:var(--accent2);font-weight:800}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>🖥️ Guía de InfoStat — enfocada al 2do Parcial</h1>
+<p>Probabilidad y Estadística · UTN FRC · Recetas exactas, verificadas en tu InfoStat/E (versión instalada en tu PC)</p>
+</div></header>
+
+<nav><div class="wrap">
+<a href="#reglas">⭐ Reglas de oro</a>
+<a href="#abrir">Abrir calculador</a>
+<a href="#normal">Normal</a>
+<a href="#exp">Exponencial</a>
+<a href="#unif">Uniforme</a>
+<a href="#t">t Student</a>
+<a href="#inverso">Problema inverso</a>
+<a href="#entre">Prob. "entre"</a>
+<a href="#infer">IC · Dócimas · n</a>
+<a href="#check">Checklist</a>
+</div></nav>
+
+<div class="wrap">
+
+<div class="note" style="margin-top:18px"><b>Lo que comprobé abriendo tu InfoStat:</b> recorrí el menú <span class="path">Estadísticas</span> y usé el <b>Calculador de probabilidades y cuantiles</b> con casos reales del repaso (N(60;15), exponencial μ=8, problema inverso). Todos los valores de esta guía dieron exactos. Lo de abajo es lo que vas a usar el día del examen.</div>
+
+<!-- REGLAS -->
+<h2 id="reglas">⭐ 4 reglas de oro (acordate de estas SÍ o SÍ)</h2>
+<div class="card">
+<div class="bad"><b>1. Coma decimal, NO punto.</b> Si escribís <kbd>0.125</kbd> InfoStat tira el error <i>"Algún parámetro especificado no es numérico"</i>. Tenés que escribir <kbd>0,125</kbd>. <span style="color:var(--muted)">(Me pasó en vivo: con punto da error, con coma calcula.)</span></div>
+<div class="warn"><b>2. Para borrar un campo NO sirve Ctrl+A.</b> Si tocás el campo y escribís, el número se <b>concatena</b> al que ya estaba (queda 1225 en vez de 225). Borralo con <kbd>Backspace</kbd> o seleccioná con el mouse antes de escribir.</div>
+<div class="warn"><b>3. La Normal pide VARIANZA (σ²), no la desviación.</b> Si el problema dice σ=15, cargás <b>225</b>. Si dice σ=40, cargás <b>1600</b>.</div>
+<div class="bad"><b>4. La Exponencial pide LAMBDA, no la media.</b> Si el problema da media μ, cargás <b>lambda = 1/μ</b>. Ej: μ=8 → lambda=<b>0,125</b>. ⚠️ El error más común del parcial.</div>
+</div>
+
+<!-- ABRIR -->
+<h2 id="abrir">Abrir el calculador de probabilidades</h2>
+<div class="card">
+<div class="steps">
+<div class="step">Abrí InfoStat (no necesitás cargar datos para esto).</div>
+<div class="step">Menú <span class="path">Estadísticas</span> → <span class="path">Probabilidades y cuantiles</span>.</div>
+<div class="step">A la izquierda elegís la <b>distribución</b>; a la derecha cargás los <b>parámetros</b> y el <b>Valor de x</b>; apretás <b>Calcular</b>.</div>
+</div>
+<p style="color:var(--muted);font-size:.85rem">Te devuelve automáticamente <b>P(X≤x)</b> y <b>P(X&gt;x)</b> a la vez. Así se ve la ventana:</p>
+
+<div class="dlg">
+<div class="bar">Calculador de probabilidades y cuantiles</div>
+<div class="bd">
+<div class="distlist">Uniforme (a,b)<br><b>● Normal (media, varianza)</b><br>T Student (v)<br>Chi Cuadrado (v,lambda)<br>Exponencial (lambda)<br>Gama · Beta · Weibull…<br>Poisson · Binomial · Geométrica…</div>
+<div class="right">
+<div class="fld"><input value="60"> media</div>
+<div class="fld"><input value="225"> varianza</div>
+<div class="out" style="margin-top:14px"><span class="lbl">Valor de x</span><br><input value="90" style="width:110px"></div>
+<div class="out"><span class="lbl">Prob. (X≤x)</span><br><span>0,9772</span></div>
+<div class="out"><span class="lbl">Prob. (X&gt;x)</span><br><span>0,0228</span></div>
+<div class="btn">🔄 Calcular</div>
+</div></div></div>
+<p style="font-size:.82rem;color:var(--muted);text-align:center">Recreación del calculador con el ejemplo N(60;15) resuelto (P(x≤90)=0,9772).</p>
+</div>
+
+<!-- NORMAL -->
+<h2 id="normal">📈 Normal — X ~ N(μ ; σ)</h2>
+<div class="card">
+<p><b>Parámetros a cargar:</b> <span class="tag">media = μ</span> <span class="tag">varianza = σ²</span></p>
+<table>
+<tr><th>Te piden…</th><th>Qué hacés en InfoStat</th></tr>
+<tr><td>P(x ≤ k) &nbsp;(o &lt;)</td><td>Valor de x = k → leés <b>Prob. (X≤x)</b></td></tr>
+<tr><td>P(x ≥ k) &nbsp;(o &gt;)</td><td>Valor de x = k → leés <b>Prob. (X&gt;x)</b></td></tr>
+<tr><td>P(k₁ ≤ x ≤ k₂)</td><td>Calculás dos veces: <b>P(x≤k₂) − P(x≤k₁)</b> (ver sección "entre")</td></tr>
+</table>
+<div class="ok"><b>Ejemplo verificado:</b> N(60;15) → media 60, varianza 15²=<b>225</b>, x=90, Calcular → P(X≤x)=<b>0,9772</b> y P(X&gt;x)=<b>0,0228</b>. ✔️</div>
+<div class="note"><b>Para la media muestral (U7):</b> es una Normal igual, pero cargás <b>varianza = σ²/n</b>. Ej: σ=40, n=120 → varianza = 1600/120 = <b>13,33</b>.</div>
+</div>
+
+<!-- EXP -->
+<h2 id="exp">⏳ Exponencial</h2>
+<div class="card">
+<p><b>Parámetro a cargar:</b> <span class="tag">lambda = 1/μ</span></p>
+<div class="bad">Si el problema te da la <b>media μ</b> (lo habitual), <b>NO</b> la cargues directo. Convertí: lambda = 1/μ.</div>
+<div class="ok"><b>Ejemplo verificado:</b> media μ=8 → lambda = 1/8 = <b>0,125</b>. Valor de x=16, Calcular → P(X&gt;x)=<b>0,1353</b> = e⁻². ✔️ (idéntico al cálculo a mano).</div>
+<p style="font-size:.86rem;color:var(--muted)">Tip: para P(x&gt;a) leés "Prob.(X&gt;x)"; para P(x&lt;a) leés "Prob.(X≤x)". Para P(a&lt;x&lt;b) restás como en la Normal.</p>
+</div>
+
+<!-- UNIF -->
+<h2 id="unif">📦 Uniforme (a,b)</h2>
+<div class="card">
+<p><b>Parámetros a cargar:</b> <span class="tag">a = mínimo</span> <span class="tag">b = máximo</span></p>
+<p>Valor de x = el punto que te piden → leés Prob.(X≤x) o Prob.(X&gt;x). Para "entre", restás.</p>
+<div class="note">La media E(x)=(a+b)/2 y la varianza V(x)=(b−a)²/12 conviene hacerlas <b>a mano</b> (son directas y a veces las piden aparte).</div>
+</div>
+
+<!-- T -->
+<h2 id="t">🔔 t de Student</h2>
+<div class="card">
+<p><b>Parámetro a cargar:</b> <span class="tag">v = grados de libertad = n − 1</span></p>
+<p>Se usa con muestras chicas (n&lt;30) y σ desconocida. Mismo mecanismo: Valor de x = el valor de t → leés la probabilidad. Y al revés con el problema inverso (abajo) para hallar el t crítico.</p>
+<div class="ok"><b>Del repaso:</b> P(t &lt; a)=0,90 con n=12 (v=11) → con el inverso obtenés a=1,3634.</div>
+</div>
+
+<!-- INVERSO -->
+<h2 id="inverso">🔁 Problema inverso (dan la probabilidad, piden el valor k)</h2>
+<div class="card">
+<p>Aparece siempre: <i>"Hallar k tal que P(x≤k)=0,9845"</i> o <i>"la nota que supera al 31,5%"</i>. En InfoStat es facilísimo:</p>
+<div class="steps">
+<div class="step">Cargás los parámetros (media, varianza, etc.) como siempre.</div>
+<div class="step"><b>Dejás vacío</b> el campo "Valor de x".</div>
+<div class="step">Escribís la probabilidad en el campo <b>Prob. (X≤x)</b> (o Prob. (X&gt;x) si te la dan por derecha).</div>
+<div class="step">Apretás Calcular → te aparece el <b>Valor de x</b> = la k buscada.</div>
+</div>
+<div class="ok"><b>Verificado:</b> N(60;225), Prob.(X≤x)=0,9845, Valor de x vacío → Calcular → <b>k = 92,36</b>. ✔️ Exacto al repaso.</div>
+</div>
+
+<!-- ENTRE -->
+<h2 id="entre">📐 Probabilidad "entre" dos valores</h2>
+<div class="card">
+<p><b>Opción A (la más segura):</b> restar dos resultados.</p>
+<p class="big" style="text-align:center">P(k₁ ≤ x ≤ k₂) = P(x≤k₂) − P(x≤k₁)</p>
+<p>Calculás P(x≤k₂), anotás; calculás P(x≤k₁), anotás; restás. Ej del repaso: P(75≤x≤90)=0,9772−0,8413=<b>0,1359</b>.</p>
+<hr style="border-color:var(--line)">
+<p><b>Opción B (gráfica):</b> <span class="path">Aplicaciones</span> → <span class="path">Didácticas</span> → <span class="path">Gráficos de funciones de densidad continuas</span>. Elegís la distribución, opción <b>"entre"</b>, ingresás los dos límites. Para las <b>dos colas</b> (P fuera del intervalo) tildás <b>"Complementario"</b>.</p>
+<div class="note">La opción B además te <b>dibuja</b> el área sombreada — útil si el examen muestra un gráfico y pide el área rayada.</div>
+</div>
+
+<!-- INFER -->
+<h2 id="infer">🧪 Intervalos de confianza · Dócimas · Tamaño de muestra</h2>
+<div class="card">
+<p>Estas funciones <b>sí necesitan una tabla de datos cargada</b> (columna con los valores de la muestra). Primero: <span class="path">Archivo → Nueva tabla</span> (o abrir el .xlsx/.IDB2) y pegás los datos en una columna.</p>
+<table>
+<tr><th>Querés…</th><th>Ruta en InfoStat</th></tr>
+<tr><td>Intervalo de confianza (media / proporción)</td><td><span class="path">Estadísticas → Estimación de características poblacionales</span></td></tr>
+<tr><td>Dócima / test de hipótesis (una muestra)</td><td><span class="path">Estadísticas → Inferencia basada en una muestra</span></td></tr>
+<tr><td>Comparar dos grupos</td><td><span class="path">Estadísticas → Inferencia basada en dos muestras</span></td></tr>
+<tr><td>Tamaño de muestra</td><td><span class="path">Estadísticas → Cálculo del tamaño muestral</span> (no requiere datos)</td></tr>
+<tr><td>Medidas resumen (media, desvío, etc.)</td><td><span class="path">Estadísticas → Medidas resumen</span></td></tr>
+</table>
+<div class="warn"><b>Potencia de la dócima (1−β):</b> InfoStat calcula automáticamente el <b>punto crítico</b> (x̄*) según α. Para la potencia en un μ dado, "clonás" el gráfico e ingresás ese μ. Ej del material: n=50, σ²=102,42 → σ²(x̄)=2,0484; μ₀=136; con α=5% el punto crítico es x̄*=138,354; para μ=139,46 la potencia 1−β=<b>0,7801</b>.</div>
+<div class="note">Si en el examen te dejan elegir, para probabilidades de modelos (U6/U7) el <b>calculador</b> es lo más rápido; para IC y dócimas con datos, usás los menús de inferencia o resolvés a mano con el formulario.</div>
+</div>
+
+<!-- CHECK -->
+<h2 id="check">✅ Checklist mental antes de apretar Calcular</h2>
+<div class="card">
+<label class="chk"><input type="checkbox"><span>¿Escribí los decimales con <b>coma</b> (0,125) y no con punto?</span></label>
+<label class="chk"><input type="checkbox"><span>¿Limpié el campo con Backspace antes de escribir (no quedó pegado al valor anterior)?</span></label>
+<label class="chk"><input type="checkbox"><span>Si es <b>Normal</b>: ¿cargué la <b>varianza</b> (σ²) y no la desviación?</span></label>
+<label class="chk"><input type="checkbox"><span>Si es <b>media muestral</b>: ¿la varianza es <b>σ²/n</b>?</span></label>
+<label class="chk"><input type="checkbox"><span>Si es <b>Exponencial</b>: ¿convertí a <b>lambda = 1/μ</b>?</span></label>
+<label class="chk"><input type="checkbox"><span>Si es <b>t</b>: ¿puse <b>v = n−1</b>?</span></label>
+<label class="chk"><input type="checkbox"><span>¿Estoy leyendo la salida correcta: <b>P(X≤x)</b> para "menor", <b>P(X&gt;x)</b> para "mayor"?</span></label>
+<label class="chk"><input type="checkbox"><span>Problema inverso: ¿dejé "Valor de x" <b>vacío</b> y cargué la probabilidad?</span></label>
+</div>
+
+<p style="text-align:center;color:var(--muted);font-size:.85rem;margin:30px 0">Practicá estas recetas con los ejercicios del simulacro del Centro de Estudio. Cuando las hagas sin pensar, tenés InfoStat dominado. 💪</p>
+
+</div>
+</body>
+</html>
