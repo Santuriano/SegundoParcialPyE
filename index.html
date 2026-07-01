@@ -137,6 +137,40 @@ kbd{background:rgba(255,255,255,.08);border:1px solid var(--line2);border-radius
 a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3)}
 a:hover{border-bottom-color:var(--accent)}
 #timer{font-family:'Space Grotesk',sans-serif;text-shadow:0 0 24px rgba(56,189,248,.5)}
+/* ---- fichas premium (filtro + buscador + tarjeta 3D) ---- */
+.lead{color:var(--muted);font-size:.92rem;max-width:72ch;margin:.2em 0 4px}
+.fq-search{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:16px 0 12px;transition:.2s}
+.fq-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.16);background:rgba(56,189,248,.05)}
+.fq-search span{font-size:1.05rem;opacity:.85}
+.fq-search input{flex:1;background:none;border:none;outline:none;color:var(--ink);font-family:inherit;font-size:.96rem}
+.fq-search input::placeholder{color:var(--muted)}
+.fq-search .fq-clear{cursor:pointer;color:var(--muted);font-size:1.1rem;padding:0 4px;display:none}
+.fq-search .fq-clear:hover{color:var(--ink)}
+.fq-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.fq-cat{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;color:var(--muted);font-family:inherit;font-size:.83rem;font-weight:600;transition:.18s}
+.fq-cat:hover{color:var(--ink);border-color:var(--line2);transform:translateY(-1px)}
+.fq-cat.active{color:var(--ink);border-color:var(--accent);background:rgba(56,189,248,.13)}
+.fq-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.fq-n{font-family:'Consolas',monospace;font-size:.72rem;color:var(--muted);opacity:.85}
+.fq-bar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:12px 0}
+.fq-nav{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:9px 16px;cursor:pointer;font-family:inherit;font-size:.82rem;font-weight:600;transition:.18s}
+.fq-nav:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.fq-count{margin-left:auto;font-family:'Consolas',monospace;font-size:.8rem;color:var(--muted)}
+.fq-scene{perspective:1800px;margin:6px 0 10px}
+.fq-card{position:relative;width:100%;min-height:330px;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.2,.7,.2,1);cursor:pointer}
+.fq-card.flipped{transform:rotateY(180deg)}
+.fq-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--r);border:1px solid var(--line2);box-shadow:var(--shadow);padding:26px 30px;display:flex;flex-direction:column;overflow:hidden}
+.fq-face::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--cc,var(--accent))}
+.fq-front{background:linear-gradient(160deg,rgba(30,42,64,.92),rgba(18,28,48,.92));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.fq-back{background:linear-gradient(160deg,rgba(15,32,27,.94),rgba(14,26,40,.94));transform:rotateY(180deg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.fq-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.fq-tab{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;color:var(--ink)}
+.fq-num{font-family:'Consolas',monospace;font-size:.74rem;color:var(--muted)}
+.fq-q{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.12rem,2.8vw,1.5rem);line-height:1.36;font-weight:500;color:var(--ink)}
+.fq-hint{margin-top:auto;padding-top:14px;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fq-a{font-size:1rem;line-height:1.62;color:#dbe7f5;overflow-y:auto;flex:1;padding-right:4px}
+.fq-a b{color:var(--accent2)}
+.fq-a::-webkit-scrollbar{width:8px}
 </style>
 </head>
 <body>
@@ -558,17 +592,21 @@ Potencia = P(x̄ &gt; 10164,5 | μ=10350) = P(z &gt; −1,855) = <b>0,9682</b> (
 
 <!-- ============ FLASHCARDS ============ -->
 <section id="flash">
-<h2>🃏 Flashcards — recuerdo activo</h2>
-<p style="color:var(--muted);font-size:.9rem">Tocá la tarjeta para girarla. Pensá la respuesta ANTES de girar. Filtrá por mazo:</p>
-<div class="deckbar">
-<button onclick="deck('all',this)" class="active">Todos</button>
-<button onclick="deck('U6',this)">U6</button>
-<button onclick="deck('U7',this)">U7</button>
-<button onclick="deck('U8',this)">U8</button>
-<button onclick="deck('U9',this)">U9</button>
-<button onclick="shuffleCards()">🔀 Mezclar</button>
+<h2>🃏 Fichas de estudio — recuerdo activo</h2>
+<p class="lead">Leé la pregunta, <b>respondé en voz alta o por escrito</b>, y recién ahí tocá la ficha para verla. Filtrá por unidad o <b>buscá un tema</b> por palabra.</p>
+<div class="fq-search"><span>🔎</span><input id="fsearch" type="text" placeholder="Buscar tema… (ej: normal, potencia, Neyman, proporción, semilla)" autocomplete="off"><span class="fq-clear" id="fclear">✕</span></div>
+<div class="fq-cats" id="fcats"></div>
+<div class="fq-bar">
+  <button class="fq-nav" id="fprev">‹ Anterior</button>
+  <button class="fq-nav" id="fnext">Siguiente ›</button>
+  <button class="fq-nav" id="fshuf">⤮ Mezclar</button>
+  <span class="fq-count" id="fcount"></span>
 </div>
-<div id="cards" class="fcwrap"></div>
+<div class="fq-scene"><div class="fq-card" id="ficard">
+  <div class="fq-face fq-front" id="ffront"></div>
+  <div class="fq-face fq-back" id="fback"></div>
+</div></div>
+<p style="color:var(--muted);font-size:.78rem;text-align:center;margin-top:6px">Atajos: ← → para navegar · barra espaciadora para dar vuelta la ficha</p>
 </section>
 
 <!-- ============ QUIZ ============ -->
@@ -970,28 +1008,62 @@ const FC=[
  ['U8','Las 5 condiciones (media): ¿qué 3 factores las determinan?','Tamaño de muestra, varianza (conocida/desconocida) y distribución (normal/no).'],
  ['U8','Para reducir el error de estimación a la mitad, n...','se cuadruplica (n×4), porque n ∝ 1/E².'],
 ];
-let curDeck='all';
-function renderCards(list){
-  const c=document.getElementById('cards');c.innerHTML='';
-  list.forEach(f=>{
-    const d=document.createElement('div');d.className='fc';
-    d.innerHTML='<div class="fcInner"><div class="fcFront"><span class="tag">'+f[0]+'</span>&nbsp;'+f[1]+'<span class="fcHint">tocá para girar</span></div><div class="fcBack">'+f[2]+'</div></div>';
-    d.onclick=()=>d.classList.toggle('flip');
-    c.appendChild(d);
+const FCATS={
+  U6:{label:'U6 · Continuos',cc:'#38bdf8'},
+  U7:{label:'U7 · Muestreo',cc:'#2dd4bf'},
+  U8:{label:'U8 · Estimación',cc:'#a78bfa'},
+  U9:{label:'U9 · Dócimas',cc:'#fbbf24'}
+};
+let fIndex=0, fFilter='all', fQuery='', fList=FC.slice();
+function fApply(){
+  const q=fQuery.trim().toLowerCase();
+  fList=FC.filter(f=>{
+    const okCat = fFilter==='all' || f[0]===fFilter;
+    const hay = (f[0]+' '+((FCATS[f[0]]||{}).label||'')+' '+f[1]+' '+f[2]).toLowerCase();
+    return okCat && (!q || hay.includes(q));
   });
+  fIndex=0; showFicha();
+  document.getElementById('fclear').style.display = fQuery ? 'block' : 'none';
 }
-function deck(d,btn){
-  curDeck=d;
-  document.querySelectorAll('#flash .deckbar button').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  renderCards(d==='all'?FC:FC.filter(f=>f[0]===d));
+function fCatsRender(){
+  const counts={}; FC.forEach(f=>counts[f[0]]=(counts[f[0]]||0)+1);
+  let html=`<button class="fq-cat active" data-cat="all"><span class="fq-dot" style="background:var(--muted)"></span>Todas <span class="fq-n">${FC.length}</span></button>`;
+  Object.keys(FCATS).forEach(k=>{ if(counts[k]) html+=`<button class="fq-cat" data-cat="${k}"><span class="fq-dot" style="background:${FCATS[k].cc}"></span>${FCATS[k].label} <span class="fq-n">${counts[k]}</span></button>`; });
+  document.getElementById('fcats').innerHTML=html;
+  document.querySelectorAll('#fcats .fq-cat').forEach(p=>p.addEventListener('click',()=>{
+    document.querySelectorAll('#fcats .fq-cat').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active'); fFilter=p.dataset.cat; fApply();
+  }));
 }
-function shuffleCards(){
-  const base=curDeck==='all'?[...FC]:FC.filter(f=>f[0]===curDeck);
-  for(let i=base.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[base[i],base[j]]=[base[j],base[i]];}
-  renderCards(base);
+function showFicha(){
+  const front=document.getElementById('ffront'), back=document.getElementById('fback'), card=document.getElementById('ficard');
+  card.classList.remove('flipped');
+  if(!fList.length){
+    front.style.setProperty('--cc','var(--muted)');
+    front.innerHTML='<div class="fq-meta"><span class="fq-tab">Sin resultados</span></div><div class="fq-q">No hay fichas para esa búsqueda. Probá con otra palabra o tocá "Todas".</div>';
+    back.innerHTML=''; document.getElementById('fcount').textContent='0 fichas';
+    return;
+  }
+  const f=fList[fIndex], cat=FCATS[f[0]]||{label:f[0],cc:'#38bdf8'};
+  front.style.setProperty('--cc',cat.cc); back.style.setProperty('--cc',cat.cc);
+  front.innerHTML=`<div class="fq-meta"><span class="fq-tab"><span class="fq-dot" style="background:${cat.cc}"></span>${cat.label}</span><span class="fq-num">${fIndex+1} / ${fList.length}</span></div><div class="fq-q">${f[1]}</div><div class="fq-hint">👆 Tocá para ver la respuesta</div>`;
+  back.innerHTML=`<div class="fq-meta"><span class="fq-tab"><span class="fq-dot" style="background:${cat.cc}"></span>${cat.label}</span><span class="fq-num">Respuesta</span></div><div class="fq-a">${f[2]}</div>`;
+  document.getElementById('fcount').textContent=`Ficha ${fIndex+1} de ${fList.length}`;
 }
-renderCards(FC);
+document.getElementById('ficard').addEventListener('click',()=>{ if(fList.length) document.getElementById('ficard').classList.toggle('flipped'); });
+document.getElementById('fprev').addEventListener('click',()=>{ if(!fList.length)return; fIndex=(fIndex-1+fList.length)%fList.length; showFicha(); });
+document.getElementById('fnext').addEventListener('click',()=>{ if(!fList.length)return; fIndex=(fIndex+1)%fList.length; showFicha(); });
+document.getElementById('fshuf').addEventListener('click',()=>{ if(!fList.length)return; for(let i=fList.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fList[i],fList[j]]=[fList[j],fList[i]];} fIndex=0; showFicha(); });
+document.getElementById('fsearch').addEventListener('input',e=>{ fQuery=e.target.value; fApply(); });
+document.getElementById('fclear').addEventListener('click',()=>{ const s=document.getElementById('fsearch'); s.value=''; fQuery=''; s.focus(); fApply(); });
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('flash').classList.contains('active'))return;
+  if(document.activeElement && document.activeElement.id==='fsearch')return;
+  if(e.key==='ArrowRight'){document.getElementById('fnext').click();}
+  else if(e.key==='ArrowLeft'){document.getElementById('fprev').click();}
+  else if(e.key===' '||e.key==='Enter'){e.preventDefault();document.getElementById('ficard').click();}
+});
+fCatsRender(); fApply();
 
 /* ---------- quiz ---------- */
 const QZ=[
