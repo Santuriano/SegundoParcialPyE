@@ -13,6 +13,7 @@ Todo funciona como páginas web estáticas (HTML + CSS + JavaScript, sin depende
 | [`index.html`](index.html) | **App principal** — Centro de Estudio con plan, teoría, flashcards, quiz y simulacro. |
 | [`guia-infostat/index.html`](guia-infostat/index.html) | **Guía rápida de InfoStat** — cómo cargar y resolver cada modelo en el software. |
 | [`Formulario-PyE-2doParcial.pdf`](Formulario-PyE-2doParcial.pdf) | **Formulario maestro** en PDF para imprimir o tener a mano durante la práctica. |
+| [`Resolucion-Parcial-PyE-con-InfoStat.pdf`](Resolucion-Parcial-PyE-con-InfoStat.pdf) | **Resolución del parcial** paso a paso resuelta con InfoStat. |
 
 ---
 
@@ -28,6 +29,7 @@ La app (`index.html`) está organizada en pestañas:
 - **🃏 Flashcards** — Tarjetas de recuerdo activo (con efecto de giro) para repasar conceptos y fórmulas clave.
 - **✅ Quiz** — Cuestionario autoevaluable con corrección inmediata, explicaciones y puntaje.
 - **📝 Simulacro** — Simulacro de examen con corrección paso a paso.
+- **📋 Examen real** — Análisis del examen real del 2do parcial, con su resolución detallada usando InfoStat.
 - **📐 Formulario** — Formulario maestro con todas las fórmulas en una sola pantalla.
 
 > 💡 La práctica está pensada para usarse junto con **InfoStat**. Por eso se incluye la guía rápida del software como material complementario.

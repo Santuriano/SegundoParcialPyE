@@ -4,90 +4,146 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Centro de Estudio · PyE 2do Parcial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f1419; --panel:#1a2230; --panel2:#222d3d; --ink:#e8edf4; --muted:#9fb0c3;
-  --accent:#4fa3ff; --accent2:#33d6a6; --warn:#ffb347; --bad:#ff6b6b; --good:#33d6a6;
-  --line:#2c3a4d; --shadow:0 6px 24px rgba(0,0,0,.35);
+  --bg:#070b12; --bg2:#0b1120; --panel:rgba(22,30,46,.62); --panel-solid:#141c2e;
+  --panel2:rgba(40,52,76,.55); --ink:#eef3fb; --muted:#9fb2cc;
+  --accent:#38bdf8; --accent2:#2dd4bf; --accent3:#a78bfa;
+  --warn:#fbbf24; --bad:#fb7185; --good:#34d399;
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.14);
+  --glow:0 0 0 1px rgba(56,189,248,.0),0 10px 40px -12px rgba(0,0,0,.7);
+  --shadow:0 18px 50px -20px rgba(0,0,0,.75);
+  --r:18px;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
-header{background:linear-gradient(135deg,#16243a,#1c3350);padding:22px 18px;border-bottom:1px solid var(--line)}
-header h1{margin:0;font-size:1.4rem}
-header p{margin:6px 0 0;color:var(--muted);font-size:.92rem}
-.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
-nav{position:sticky;top:0;z-index:30;background:#0f1419ee;backdrop-filter:blur(6px);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
-nav .wrap{display:flex;gap:6px;padding:8px 16px}
-nav button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:8px 13px;border-radius:9px;cursor:pointer;font-size:.86rem;transition:.15s}
-nav button:hover{background:var(--panel2)}
-nav button.active{background:var(--accent);border-color:var(--accent);color:#04101e;font-weight:700}
-section{display:none;padding:24px 0 60px}
-section.active{display:block;animation:fade .25s}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
-h2{font-size:1.3rem;border-left:4px solid var(--accent);padding-left:12px;margin:28px 0 14px}
-h3{color:var(--accent2);margin:22px 0 8px;font-size:1.08rem}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Inter',system-ui,sans-serif;color:var(--ink);line-height:1.6;
+  background:var(--bg);position:relative;min-height:100vh;letter-spacing:.1px;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(60% 50% at 12% -5%,rgba(56,189,248,.16),transparent 60%),
+    radial-gradient(55% 45% at 100% 0%,rgba(167,139,250,.14),transparent 60%),
+    radial-gradient(60% 50% at 80% 110%,rgba(45,212,191,.12),transparent 60%),
+    linear-gradient(180deg,#070b12,#0a0f1c 40%,#070b12)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;opacity:.4;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:44px 44px;mask-image:radial-gradient(circle at 50% 0%,#000,transparent 75%)}
+::selection{background:rgba(56,189,248,.3)}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-thumb{background:linear-gradient(var(--accent),var(--accent2));border-radius:8px;border:3px solid transparent;background-clip:content-box}
+*::-webkit-scrollbar-track{background:transparent}
+
+header{position:relative;overflow:hidden;padding:42px 18px 34px;
+  background:linear-gradient(135deg,rgba(20,32,56,.85),rgba(16,26,48,.5));
+  border-bottom:1px solid var(--line)}
+header::before{content:"";position:absolute;inset:0;z-index:0;opacity:.55;
+  background:radial-gradient(40% 120% at 8% 0%,rgba(56,189,248,.35),transparent 60%),radial-gradient(40% 130% at 95% 100%,rgba(167,139,250,.3),transparent 60%)}
+header .wrap{position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--accent2);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);padding:5px 12px;border-radius:30px;margin-bottom:14px}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+header h1{margin:0;font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.5px;
+  background:linear-gradient(120deg,#fff 20%,#9bdcff 55%,#7ef0d2 90%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header p{margin:10px 0 0;color:var(--muted);font-size:.95rem;max-width:680px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+
+nav{position:sticky;top:0;z-index:30;background:rgba(8,12,20,.72);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;gap:7px;padding:11px 18px}
+nav button{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line);padding:9px 15px;border-radius:12px;cursor:pointer;font-size:.85rem;font-weight:600;font-family:inherit;transition:.2s cubic-bezier(.4,0,.2,1);white-space:nowrap}
+nav button:hover{background:rgba(255,255,255,.09);color:var(--ink);transform:translateY(-1px)}
+nav button.active{background:linear-gradient(120deg,var(--accent),var(--accent2));border-color:transparent;color:#041019;font-weight:700;box-shadow:0 6px 20px -6px rgba(56,189,248,.7)}
+section{display:none;padding:30px 0 80px}
+section.active{display:block;animation:fade .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h2{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;letter-spacing:-.3px;margin:30px 0 18px;padding-left:16px;position:relative}
+h2::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:4px;border-radius:4px;background:linear-gradient(var(--accent),var(--accent2));box-shadow:0 0 14px rgba(56,189,248,.6)}
+h3{font-family:'Space Grotesk',sans-serif;color:var(--accent2);margin:22px 0 9px;font-size:1.12rem;font-weight:600}
 p,li{font-size:.96rem}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;box-shadow:var(--shadow)}
-.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:2px 11px;font-size:.74rem;color:var(--muted);margin:2px 4px 2px 0}
-.fml{background:#0c1118;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-family:'Cambria Math','Georgia',serif;font-size:1.05rem;overflow-x:auto;margin:8px 0}
-.fml b{color:var(--accent2)}
-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}
-th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
-th{background:var(--panel2);color:var(--accent)}
-.pill{font-size:.7rem;padding:1px 8px;border-radius:12px;font-weight:700}
-.pill.z{background:#15324f;color:#7ec4ff}.pill.t{background:#143a2e;color:#6fe0b6}.pill.p{background:#3a2c14;color:#ffce7a}
-.warn{border-left:4px solid var(--warn);background:#251e10;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
-.note{border-left:4px solid var(--accent);background:#11202e;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin:16px 0;
+  box-shadow:var(--shadow);backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);
+  transition:.3s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
+.card:hover{transform:translateY(-3px);border-color:var(--line2);box-shadow:0 26px 60px -22px rgba(0,0,0,.85)}
+.tag{display:inline-block;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);border-radius:30px;padding:3px 12px;font-size:.73rem;font-weight:600;color:#8fd6ff;margin:2px 4px 2px 0}
+.fml{background:linear-gradient(180deg,rgba(4,8,15,.85),rgba(8,14,26,.85));border:1px solid var(--line2);border-radius:12px;padding:13px 16px;font-family:'Cambria Math','Georgia',serif;font-size:1.06rem;overflow-x:auto;margin:10px 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.fml b{color:var(--accent2);font-weight:700}
+table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0;font-size:.9rem;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:10px 12px;text-align:left}
+tr td:last-child,tr th:last-child{border-right:0}
+tbody tr:last-child td{border-bottom:0}
+th{background:rgba(56,189,248,.1);color:#9bdcff;font-weight:600;font-family:'Space Grotesk',sans-serif}
+tr:hover td{background:rgba(255,255,255,.025)}
+.pill{font-size:.7rem;padding:2px 9px;border-radius:12px;font-weight:700}
+.pill.z{background:rgba(56,189,248,.18);color:#8fd6ff}.pill.t{background:rgba(45,212,191,.18);color:#7ef0d2}.pill.p{background:rgba(251,191,36,.18);color:#ffce7a}
+.warn{border-left:3px solid var(--warn);background:linear-gradient(90deg,rgba(251,191,36,.13),rgba(251,191,36,.02));padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
+.note{border-left:3px solid var(--accent);background:linear-gradient(90deg,rgba(56,189,248,.13),rgba(56,189,248,.02));padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
 ul{padding-left:20px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:680px){.grid2{grid-template-columns:1fr}}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:680px){.grid2{grid-template-columns:1fr}header h1{font-size:1.55rem}}
 /* plan */
-.day{border:1px solid var(--line);border-radius:14px;margin:14px 0;overflow:hidden}
-.day h4{margin:0;padding:14px 16px;background:var(--panel2);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:1.05rem}
-.day .body{padding:6px 16px 14px}
-.block{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.day{border:1px solid var(--line);border-radius:var(--r);margin:16px 0;overflow:hidden;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow)}
+.day h4{margin:0;padding:16px 18px;background:linear-gradient(90deg,rgba(56,189,248,.1),rgba(45,212,191,.04));cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:1.1rem;font-family:'Space Grotesk',sans-serif;font-weight:600;transition:.2s}
+.day h4:hover{background:linear-gradient(90deg,rgba(56,189,248,.16),rgba(45,212,191,.07))}
+.day .body{padding:8px 18px 16px}
+.block{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .block:last-child{border:0}
-.block .t{min-width:96px;color:var(--accent);font-weight:700;font-size:.85rem}
-.chk{display:flex;align-items:flex-start;gap:9px;padding:7px 0;cursor:pointer}
-.chk input{margin-top:4px;width:17px;height:17px;accent-color:var(--accent2);cursor:pointer}
-.chk.done span{text-decoration:line-through;color:var(--muted)}
+.block .t{min-width:96px;color:var(--accent);font-weight:700;font-size:.84rem}
+.chk{display:flex;align-items:flex-start;gap:11px;padding:8px 0;cursor:pointer;border-radius:8px;transition:.15s}
+.chk:hover{background:rgba(255,255,255,.03)}
+.chk input{margin-top:4px;width:18px;height:18px;accent-color:var(--accent2);cursor:pointer;flex-shrink:0}
+.chk.done span{text-decoration:line-through;color:var(--muted);opacity:.65}
 /* flashcards */
-.fcwrap{perspective:1400px}
-.fc{background:none;border:none;width:100%;cursor:pointer;margin:10px 0}
-.fcInner{position:relative;transition:transform .5s;transform-style:preserve-3d;min-height:130px}
+.fcwrap{perspective:1600px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:680px){.fcwrap{grid-template-columns:1fr}}
+.fc{background:none;border:none;width:100%;cursor:pointer;margin:0;padding:0}
+.fcInner{position:relative;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;min-height:150px}
 .fc.flip .fcInner{transform:rotateX(180deg)}
-.fcFront,.fcBack{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;padding:18px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line)}
-.fcFront{background:linear-gradient(135deg,#1d2a3d,#243650);font-weight:600;font-size:1rem}
-.fcBack{background:linear-gradient(135deg,#10241c,#16352a);transform:rotateX(180deg);color:#d7f5e9;font-size:.93rem;flex-direction:column}
-.fcHint{position:absolute;bottom:7px;right:12px;font-size:.66rem;color:var(--muted)}
-.deckbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.deckbar button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:.8rem}
+.fcFront,.fcBack{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line2);box-shadow:var(--shadow)}
+.fcFront{background:linear-gradient(140deg,rgba(30,42,64,.9),rgba(20,30,52,.9));font-weight:600;font-size:1rem;backdrop-filter:blur(10px)}
+.fcBack{background:linear-gradient(140deg,rgba(13,42,34,.92),rgba(16,52,44,.92));transform:rotateX(180deg);color:#cdf7ec;font-size:.93rem;flex-direction:column;backdrop-filter:blur(10px)}
+.fcHint{position:absolute;bottom:8px;right:13px;font-size:.65rem;color:var(--muted);opacity:.7}
+.deckbar{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 18px}
+.deckbar button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);padding:8px 15px;border-radius:11px;cursor:pointer;font-size:.82rem;font-weight:600;font-family:inherit;transition:.2s}
+.deckbar button:hover{background:rgba(255,255,255,.09);color:var(--ink)}
+.deckbar button.active{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#041019;border-color:transparent;box-shadow:0 6px 18px -6px rgba(56,189,248,.6)}
 /* quiz */
-.q{margin:16px 0;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
-.q .stem{font-weight:600;margin-bottom:10px}
-.opt{display:block;padding:9px 12px;margin:6px 0;border:1px solid var(--line);border-radius:9px;cursor:pointer;transition:.12s;font-size:.92rem}
-.opt:hover{background:var(--panel2)}
-.opt.correct{background:#143a2e;border-color:var(--good);color:#aef0d4}
-.opt.wrong{background:#3a1717;border-color:var(--bad);color:#ffc2c2}
+.q{margin:16px 0;padding:20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow)}
+.q .stem{font-weight:600;margin-bottom:12px;font-size:1rem}
+.opt{display:block;padding:11px 14px;margin:7px 0;border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.18s cubic-bezier(.4,0,.2,1);font-size:.92rem;background:rgba(255,255,255,.02)}
+.opt:hover{background:rgba(255,255,255,.07);border-color:var(--line2);transform:translateX(3px)}
+.opt.correct{background:linear-gradient(90deg,rgba(52,211,153,.22),rgba(52,211,153,.05));border-color:var(--good);color:#b6f5da}
+.opt.wrong{background:linear-gradient(90deg,rgba(251,113,133,.22),rgba(251,113,133,.05));border-color:var(--bad);color:#ffc6cf}
 .opt.sel{border-color:var(--accent)}
-.expl{margin-top:10px;font-size:.86rem;color:var(--muted);display:none;border-top:1px dashed var(--line);padding-top:9px}
-.expl.show{display:block}
-.score{position:sticky;bottom:0;background:#0f1419ee;backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:12px;padding:10px 16px;margin-top:18px;font-weight:700;text-align:center}
-details{margin:8px 0;border:1px solid var(--line);border-radius:10px;padding:4px 12px;background:var(--panel)}
-summary{cursor:pointer;font-weight:600;padding:8px 0;color:var(--accent2)}
-.step{counter-increment:s;margin:9px 0;padding-left:34px;position:relative}
-.step:before{content:counter(s);position:absolute;left:0;top:0;width:24px;height:24px;background:var(--accent);color:#04101e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}
+.expl{margin-top:11px;font-size:.87rem;color:var(--muted);display:none;border-top:1px solid var(--line);padding-top:10px}
+.expl.show{display:block;animation:fade .3s}
+.score{position:sticky;bottom:14px;background:rgba(8,12,20,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line2);border-radius:14px;padding:13px 18px;margin-top:20px;font-weight:700;text-align:center;box-shadow:0 14px 40px -14px rgba(0,0,0,.85)}
+details{margin:10px 0;border:1px solid var(--line);border-radius:12px;padding:4px 16px;background:rgba(255,255,255,.025);transition:.2s}
+details[open]{background:rgba(56,189,248,.05);border-color:var(--line2)}
+summary{cursor:pointer;font-weight:600;padding:10px 0;color:var(--accent2);font-family:'Space Grotesk',sans-serif;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--accent);transition:.2s;display:inline-block}
+details[open] summary::before{transform:rotate(90deg)}
+.step{counter-increment:s;margin:11px 0;padding-left:40px;position:relative}
+.step:before{content:counter(s);position:absolute;left:0;top:-2px;width:28px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#041019;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82rem;box-shadow:0 4px 12px -3px rgba(56,189,248,.6)}
 .steps{counter-reset:s}
-kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.8rem}
-.progbar{height:8px;background:var(--panel2);border-radius:6px;overflow:hidden;margin:6px 0}
-.progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:.4s}
-a{color:var(--accent)}
+kbd{background:rgba(255,255,255,.08);border:1px solid var(--line2);border-radius:6px;padding:2px 7px;font-size:.8rem;font-family:'Consolas',monospace;box-shadow:0 2px 0 rgba(0,0,0,.4)}
+.progbar{height:10px;background:rgba(255,255,255,.06);border-radius:8px;overflow:hidden;margin:8px 0;border:1px solid var(--line)}
+.progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));background-size:200% 100%;width:0;transition:width .6s cubic-bezier(.4,0,.2,1);box-shadow:0 0 16px rgba(56,189,248,.6);animation:shimmer 3s linear infinite}
+@keyframes shimmer{to{background-position:200% 0}}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(56,189,248,.3)}
+a:hover{border-bottom-color:var(--accent)}
+#timer{font-family:'Space Grotesk',sans-serif;text-shadow:0 0 24px rgba(56,189,248,.5)}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-<h1>📊 Centro de Estudio — Probabilidad y Estadística</h1>
-<p>2do Parcial · Unidades 6 a 9 · UTN FRC — Plan de 3 días para Hugo · Examen teórico-práctico</p>
+<span class="eyebrow">UTN FRC · 2do Parcial · U6–U9</span>
+<h1>Centro de Estudio · Probabilidad y Estadística</h1>
+<p>Plan de 3 días para Hugo · Examen teórico-práctico · <b style="color:var(--accent2)">Actualizado con el examen real</b> (ver pestaña 📋 Examen real)</p>
 </div></header>
 
 <nav><div class="wrap">
@@ -99,6 +155,7 @@ a{color:var(--accent)}
 <button onclick="go('flash',this)">🃏 Flashcards</button>
 <button onclick="go('quiz',this)">✅ Quiz</button>
 <button onclick="go('sim',this)">📝 Simulacro</button>
+<button onclick="go('examen',this)">📋 Examen real</button>
 <button onclick="go('formulario',this)">📐 Formulario</button>
 </div></nav>
 
@@ -187,6 +244,16 @@ a{color:var(--accent)}
 </div>
 </div>
 
+<div class="card"><h3>⭐ Exponencial a partir de una TASA (relación con Poisson) — apareció</h3>
+<p>Si te dan "<b>en promedio ocurren λ eventos en cierto período</b>" (una tasa, tipo Poisson) y te preguntan por el <b>tiempo hasta el próximo evento</b>, ese tiempo es <b>Exponencial</b>. El truco es armar bien la media:</p>
+<div class="fml">media del tiempo entre eventos: μ = <b>período / nº de eventos</b> = 1/tasa</div>
+<div class="fml">P(x &gt; t) = e^(−t/μ) = <b>e^(−t·tasa)</b></div>
+<div class="note"><b>Ejemplo real:</b> el sistema detecta <b>16 faltas en 5 horas</b>. ¿Prob. de que pasen más de 2 horas hasta la próxima?<br>
+tasa = 16/5 = 3,2 por hora. P(x&gt;2) = e^(−2·3,2) = e^(−6,4) = <b>0,00166</b> (casi imposible).<br>
+El "promedio de tiempo entre detecciones" = 5/16 h ≈ 18,75 min.</div>
+<div class="warn"><b>Ojo con las unidades:</b> t y la tasa deben estar en la <b>misma unidad</b> de tiempo. En Infostat cargás la Exponencial con <b>lambda = la tasa</b> (ej. 3,2), no la media.</div>
+</div>
+
 <div class="card"><h3><span class="tag">3</span> Normal &nbsp; X ~ N(μ ; σ)</h3>
 <p>Campana <b>simétrica y mesocúrtica</b>; media=mediana=moda; área total=1; asintótica al eje x; rango (−∞,+∞).</p>
 <div class="fml">Estandarización: &nbsp; z = <b>(x − μ) / σ</b> &nbsp;&nbsp;→&nbsp;&nbsp; z ~ N(0 ; 1)</div>
@@ -197,8 +264,12 @@ a{color:var(--accent)}
 <div class="step"><b>P(x ≥ k) = 1 − P(x ≤ k).</b></div>
 <div class="step"><b>P(k₁ ≤ x ≤ k₂) = P(x ≤ k₂) − P(x ≤ k₁).</b></div>
 </div>
-<p style="font-size:.85rem"><b>Problema inverso</b> (dan la probabilidad, piden el valor k): buscás el z que deja esa área y despejás <b>x = μ + z·σ</b>.</p>
+<p style="font-size:.85rem"><b>Problema inverso</b> (dan la probabilidad, piden el valor k): buscás el z que deja esa área y despejás <b>x = μ + z·σ</b>. <span style="color:var(--accent2)">Ej (examen real): "el 20% que más gana tiene salario mayor a…" → P(x&gt;k)=0,20 → z₀,₈₀=0,8416 → k=25,3+0,8416·3=<b>27,82</b>.</span></p>
 <p style="font-size:.85rem"><b>"¿Cuántos de N?"</b> → probabilidad × N. <b>"¿Qué porcentaje?"</b> → probabilidad × 100.</p>
+<div class="warn"><b>⭐ Cálculo P(|x − μ| ≤ k) — ¡APARECIÓ EN EL EXAMEN!</b> Significa "a no más de k de la media", es decir el intervalo <b>μ ± k</b>.<br>
+P(|x−μ| ≤ k) = P(μ−k ≤ x ≤ μ+k). Como es simétrico: = <b>2·P(0 ≤ z ≤ k/σ) = 2·Φ(k/σ) − 1</b>.<br>
+<span style="color:var(--accent2)">Ej real: N(25,3 ; σ=3), P(|x−μ|≤4) = 2·Φ(4/3) − 1 = 2·0,9088 − 1 = <b>0,8176</b>.</span><br>
+Y P(|x−μ| ≥ k) = 1 − P(|x−μ| ≤ k) (las dos colas).</div>
 <details><summary>Regla empírica (interpretación de la varianza)</summary>
 <p>En una Normal: <b>≈68%</b> de los datos caen en μ±1σ · <b>≈95%</b> en μ±2σ · <b>≈99,7%</b> en μ±3σ. El <b>puntaje típico</b> es justamente z (cuántas desviaciones está x de la media).</p></details>
 </div>
@@ -209,7 +280,12 @@ a{color:var(--accent)}
 <p style="font-size:.85rem;color:var(--muted)">Ej: P(a &lt; t₁₁ &lt; 2,718)=0,09 con n=12 → P(t&lt;a)=0,90 → a=1,3634.</p>
 </div>
 
-<div class="warn"><b>Relación discretos ↔ Normal:</b> cuando una Binomial tiene n grande, se aproxima con la Normal (μ=np, σ=√(npq)). Es el puente entre la unidad de discretas y la Normal.</div>
+<div class="card"><h3>🔗 Relación modelos discretos ↔ Normal (apareció en el examen)</h3>
+<p>Cuando un modelo discreto tiene parámetro grande, se <b>aproxima con la Normal</b>:</p>
+<div class="fml">Binomial (n grande): μ = <b>n·p</b> &nbsp;·&nbsp; σ = <b>√(n·p·q)</b></div>
+<div class="fml">Poisson (λ grande): μ = <b>λ</b> &nbsp;·&nbsp; σ = <b>√λ</b></div>
+<div class="note"><b>Qué implica</b> (pregunta conceptual real): que <b>el promedio de ocurrencias (λ) determina la ubicación</b> de la Normal aproximada, y que <b>la dispersión depende del parámetro del modelo original</b> (porque σ=√λ sale de λ). La variable <b>sigue siendo aleatoria</b> y conserva variabilidad.</div>
+</div>
 </section>
 
 <!-- ============ U7 ============ -->
@@ -222,7 +298,44 @@ a{color:var(--accent)}
 <div class="card"><h3>No probabilístico</h3><p>La selección NO es al azar → no se puede medir el error. Tipos:</p>
 <ul><li><b>De criterio:</b> el experto elige a dedo.</li><li><b>De la muestra disponible:</b> los que están a mano.</li><li><b>Por cuotas:</b> se llenan cupos por categoría, pero eligiendo a dedo dentro de cada uno.</li></ul></div>
 <div class="card"><h3>Probabilístico</h3><p>Cada elemento tiene probabilidad <b>conocida</b> de ser elegido → permite inferencia. Tipos:</p>
-<ul><li><b>Aleatorio simple:</b> todos igual de probables (sorteo).</li><li><b>Estratificado:</b> divido en estratos homogéneos y muestreo en cada uno.</li><li><b>Sistemático:</b> uno cada k elementos.</li><li><b>Por conglomerados:</b> elijo grupos completos (ej. barrios).</li></ul></div>
+<ul><li><b>Aleatorio simple:</b> todos igual de probables (sorteo).</li><li><b>Estratificado:</b> divido en estratos homogéneos y muestreo en cada uno.</li><li><b>Sistemático:</b> uno cada k elementos.</li><li><b>Por conglomerados:</b> elijo al azar grupos/conglomerados completos (ej. ciudades, barrios) y relevo TODOS sus elementos. El conglomerado es la unidad de muestreo, no el individuo.</li></ul></div>
+</div>
+
+<div class="card"><h3>⭐ Muestreo estratificado con afijación proporcional — ¡APARECIÓ EN EL EXAMEN!</h3>
+<p>Repartís el tamaño total de la muestra <b>n</b> entre los estratos <b>en proporción</b> a lo que pesa cada estrato en la población:</p>
+<div class="fml">nᵢ = <b>n · (Nᵢ/N)</b> &nbsp;=&nbsp; n · (porcentaje del estrato)</div>
+<div class="note"><b>Ejemplo real:</b> 33.600 electores, muestra n=300. Estratos: 20% (18-25 años), 55% (26-40), 25% (más de 40).<br>
+• 18-25: n·0,20 = 300·0,20 = <b>60</b><br>
+• 26-40: n·0,55 = 300·0,55 = <b>165</b><br>
+• +40: n·0,25 = 300·0,25 = <b>75</b><br>
+Verificación: 60+165+75 = 300 ✔️ (siempre deben sumar n).</div>
+<p style="font-size:.84rem;color:var(--muted)">Tip: si te dan el % directo, multiplicás n por el % y listo. Si te dan cantidades Nᵢ, hacés n·(Nᵢ/N).</p>
+</div>
+
+<div class="card"><h3>⭐ Los 3 tipos de afijación (igual · proporcional · Neyman) — apareció</h3>
+<p>Cuando repartís la muestra n entre <b>k estratos</b>, hay tres criterios:</p>
+<table>
+<tr><th>Afijación</th><th>Fórmula (nᵢ del estrato i)</th><th>Cuándo</th></tr>
+<tr><td><b>Igual</b></td><td>nᵢ = <b>n / k</b></td><td>Mismo tamaño en cada estrato</td></tr>
+<tr><td><b>Proporcional</b></td><td>nᵢ = <b>n · (Nᵢ/N)</b></td><td>Proporcional al peso del estrato</td></tr>
+<tr><td><b>Neyman</b></td><td>nᵢ = <b>n · (Nᵢ·σᵢ) / Σ(Nⱼ·σⱼ)</b></td><td>Pondera por tamaño <b>y</b> variabilidad σᵢ</td></tr>
+</table>
+<div class="note"><b>Ejemplo real:</b> 360 profesionales, estratos Técnicos(N=800,σ=7), Licenciados(600,σ=3), Ingenieros(400,σ=5).<br>
+• <b>Igual</b> (3 estratos): 360/3 = <b>120</b> Licenciados.<br>
+• <b>Proporcional</b> Técnicos: 360·(800/1800) = <b>160</b>.<br>
+• <b>Neyman</b> Ingenieros: 360·(400·5)/(800·7+600·3+400·5) = 360·2000/9400 = 76,6 → <b>77</b>.</div>
+</div>
+
+<div class="card"><h3>🖥️ Muestreo aleatorio con semilla en InfoStat (¡apareció en el examen!)</h3>
+<p>Te dan una tabla de datos y te piden <b>sacar varias muestras aleatorias</b> (con reposición), calcular la <b>media de cada una</b> y usar una <b>semilla</b> para que el resultado sea reproducible. Es 100% en InfoStat:</p>
+<div class="steps">
+<div class="step"><b>Cargá los datos</b> en una columna (Archivo → Nueva tabla, o pegá desde Excel).</div>
+<div class="step">Si lo piden, <b>ordenalos</b>: Datos → Ordenar → elegí la columna y el criterio (ascendente/descendente).</div>
+<div class="step"><b>Fijá la semilla</b> antes de muestrear (para que dé el mismo resultado): en la herramienta de obtención de muestras de InfoStat cargás <b>Semilla = 15</b> (o la que pidan).</div>
+<div class="step"><b>Generá las muestras:</b> Datos → obtener/extraer muestras aleatorias → indicá <b>cantidad de muestras = 8</b>, <b>tamaño de cada una = 5</b>, y tildá <b>con reposición</b>.</div>
+<div class="step"><b>Media de cada muestra:</b> Estadísticas → Medidas resumen → Media, por cada muestra generada. Redondeá con <b>2 decimales</b> (redondeo simétrico).</div>
+</div>
+<div class="note">Esto es la <b>distribución empírica de la media muestral</b>: ves "en vivo" cómo cada muestra da una media distinta alrededor de μ. La semilla solo garantiza que tu resultado sea reproducible y coincida con el esperado.</div>
 </div>
 
 <h3>Distribución de la media muestral (x̄)</h3>
@@ -246,6 +359,7 @@ a{color:var(--accent)}
 <li><b>Teorema Central del Límite (TCL):</b> si <b>n &gt; 30</b>, la distribución de x̄ es <b>aproximadamente Normal</b>, <b>aunque la población no sea normal</b>. Por eso podemos usar Z en estimación e hipótesis con muestras grandes.</li>
 </ul>
 <div class="note">Esta es la <b>llave</b> que conecta U6, U8 y U9: gracias al TCL podemos usar la Normal para inferir.</div>
+<div class="warn"><b>⭐ Error de muestreo vs tamaño n (pregunta conceptual real):</b> "cuanto mayor sea n, mayor será el error" es <b>FALSO</b>. Como el error estándar es σ/√n, <b>al aumentar n el error DISMINUYE</b>. Más muestra = estimación más precisa.</div>
 </div>
 </section>
 
@@ -261,7 +375,8 @@ a{color:var(--accent)}
 <tr><td><b>Eficiencia</b></td><td>Entre los insesgados, el de <b>menor varianza</b> es el más eficiente.</td></tr>
 <tr><td><b>Consistencia</b></td><td>Al crecer n, se acerca al parámetro (su error tiende a 0).</td></tr>
 <tr><td><b>Suficiencia</b></td><td>Aprovecha <b>toda</b> la información de la muestra sobre el parámetro.</td></tr>
-</table></div>
+</table>
+<div class="warn"><b>⚠️ Trampa del examen — no confundas:</b> que un estimador tenga <b>menor desviación</b> que otros NO lo hace <b>insesgado</b>, lo hace <b>eficiente</b>. Insesgado = su esperanza coincide con el parámetro: <b>E(θ̂)=θ</b>. Para verificar la insesgadez se necesita el valor medio del estimador <b>sobre todas las muestras posibles</b> de tamaño n.</div></div>
 
 <div class="card"><h3>Estimación puntual vs por intervalo</h3>
 <p><b>Puntual:</b> un solo número (x̄ estima μ, p̂ estima P). Limitación: casi nunca acierta exacto y no dice el margen de error. <b>Por intervalo:</b> un rango con un <b>nivel de confianza</b> (1−α), típicamente 90%, 95%, 99%.</p>
@@ -278,14 +393,45 @@ a{color:var(--accent)}
 <div class="fml">IC proporción P: &nbsp; <b>p̂ ± z<sub>1−α/2</sub> · √[ p̂(1−p̂)/n ]</b></div>
 </div>
 
+<div class="card"><h3>⭐ Las "5 condiciones" para estimar/docimar la media (3 factores)</h3>
+<p>Que uses Z o t (o que el problema tenga solución) depende de <b>3 factores</b> que aparecieron como pregunta conceptual:</p>
+<ul>
+<li><b>Tamaño de la muestra</b> (n &lt; 30 ó n ≥ 30).</li>
+<li><b>Varianza poblacional</b> (conocida ó desconocida).</li>
+<li><b>Distribución de la población</b> (normal ó no normal).</li>
+</ul>
+<div class="note">Combinándolos salen las condiciones: σ conocida → Z; σ desconocida con n grande → Z (por TCL); σ desconocida con n chico y población normal → t. Si n es chico y la población no es normal, el problema no tiene solución estándar.</div>
+</div>
+
 <div class="card"><h3>Valores críticos de z más usados</h3>
 <table>
-<tr><th>Confianza 1−α</th><th>α</th><th>z<sub>1−α/2</sub></th></tr>
-<tr><td>90%</td><td>0,10</td><td><b>1,645</b></td></tr>
-<tr><td>95%</td><td>0,05</td><td><b>1,96</b></td></tr>
-<tr><td>99%</td><td>0,01</td><td><b>2,575</b></td></tr>
+<tr><th>Confianza 1−α</th><th>α</th><th>z<sub>1−α/2</sub> (bilateral/IC)</th><th>z<sub>1−α</sub> (lateral/dócima)</th></tr>
+<tr><td>90%</td><td>0,10</td><td><b>1,645</b></td><td>1,28</td></tr>
+<tr><td>95%</td><td>0,05</td><td><b>1,96</b></td><td><b>1,645</b></td></tr>
+<tr><td>98%</td><td>0,02</td><td><b>2,326</b></td><td>2,055</td></tr>
+<tr><td>99%</td><td>0,01</td><td><b>2,575</b></td><td>2,326</td></tr>
 </table>
-<p style="font-size:.82rem;color:var(--muted)">Memorizá estos tres: aparecen siempre en IC y dócimas.</p></div>
+<p style="font-size:.82rem;color:var(--muted)">El <b>98%→2,326</b> apareció en el examen (IC de proporción). En IC usás la columna bilateral; en dócima lateral usás la otra.</p></div>
+
+<div class="card"><h3>⭐ Estimar la media a partir de datos crudos (examen real)</h3>
+<p>Cuando te dan una <b>tabla de datos</b> (no la media ya calculada):</p>
+<div class="steps">
+<div class="step"><b>Estimación puntual de la media</b> = el promedio de los datos x̄ (en Infostat: <span style="color:var(--accent2)">Estadísticas → Medidas resumen</span>). Ej real: dio x̄=<b>13,58</b>.</div>
+<div class="step"><b>Intervalo</b>: x̄ ± (z o t)·(s/√n). Con n≥30 usás z; con n&lt;30 y σ desconocida, t. En Infostat: <span style="color:var(--accent2)">Estadísticas → Estimación de características poblacionales</span>. Ej real (90%): [<b>11,63 ; 15,53</b>].</div>
+</div></div>
+
+<div class="card"><h3>⭐ Qué significa el nivel de confianza (¡muy preguntado!)</h3>
+<div class="note">Un coeficiente de confianza del <b>98%</b> significa: <b>"de cada 100 intervalos que pudieran construirse (con distintas muestras), 98 contienen el parámetro y 2 no lo contienen"</b>. <br>NO significa "98 de cada 100 personas…" ni nada sobre individuos. Es sobre los <b>intervalos</b>.</div>
+</div>
+
+<div class="card"><h3>⭐ Ancho del intervalo vs nivel de confianza (apareció 2 veces)</h3>
+<table>
+<tr><th>Si subo la confianza (95%→99%)</th><th>Si bajo la confianza (98%→90%)</th></tr>
+<tr><td>z mayor → intervalo <b>más ANCHO</b></td><td>z menor → intervalo <b>más ANGOSTO</b></td></tr>
+<tr><td>Menor riesgo de errar</td><td><b>Mayor riesgo</b> de no contener el parámetro</td></tr>
+</table>
+<div class="warn"><b>Clave:</b> más confianza = intervalo más ancho pero más seguro. Menos confianza = más angosto pero más riesgoso. La <b>estimación puntual (x̄) NO cambia</b> con el nivel de confianza; solo cambia el "estadístico para inferencias" (z o t) que la rodea.</div>
+</div>
 
 <h3>Tamaño de muestra (despejás n)</h3>
 <div class="grid2">
@@ -295,6 +441,26 @@ a{color:var(--accent)}
 <div class="card"><h4 style="margin:0 0 6px">Para la proporción</h4>
 <div class="fml">n = <b>z² · p̂(1−p̂) / E²</b></div>
 <p style="font-size:.84rem;color:var(--muted)">Si no hay estimación previa de p, se usa el peor caso <b>p=0,5</b> (p(1−p)=0,25).</p></div>
+</div>
+
+<div class="card"><h3>⭐ Error tolerable máximo (despejar E) — apareció en el examen</h3>
+<p>El "problema inverso" del tamaño de muestra: te dan <b>n</b> y te piden el <b>error máximo</b>. Despejás E de la fórmula:</p>
+<div class="fml">Proporción: E = <b>z · √[ p(1−p)/n ]</b> &nbsp;·&nbsp; Media: E = <b>z · σ/√n</b></div>
+<div class="note"><b>Ejemplo real:</b> n=300, confianza 98% (z=2,326), sin dato de p → p=0,5. <br>E = 2,326·√(0,25/300) = 2,326·0,02887 = <b>0,0671</b>.</div>
+<div class="warn"><b>⭐ "Reducir el error a la mitad" (apareció):</b> como n ∝ 1/E², si querés <b>la mitad de error</b> necesitás <b>4 veces</b> el n (n×4). Ej: si con n=65 tenías cierto error, para la mitad necesitás n=<b>260</b>.</div>
+</div>
+
+<div class="card"><h3>⭐ Ejemplos resueltos (del 2do modelo de examen)</h3>
+<p style="font-size:.9rem"><b>Tamaño de muestra (proporción):</b> certidumbre 98%, error &lt;0,04, sin dato de p.</p>
+<div class="fml">n = z²·p(1−p)/E² = (2,326)²·0,25/(0,04)² = 5,41·0,25/0,0016 = 845,4 → <b>n=846</b></div>
+<p style="font-size:.9rem;margin-top:10px"><b>IC de proporción 98%:</b> n=300, 75 éxitos → p̂=0,25.</p>
+<div class="fml">IC = 0,25 ± 2,326·√(0,25·0,75/300) = 0,25 ± 0,0582 = <b>[0,1918 ; 0,3082]</b></div>
+<p style="font-size:.9rem;margin-top:10px"><b>IC de proporción 95%:</b> n=180, 126 éxitos → p̂=0,70.</p>
+<div class="fml">IC = 0,70 ± 1,96·√(0,70·0,30/180) = 0,70 ± 0,067 = <b>[0,633 ; 0,767]</b></div>
+</div>
+
+<div class="card"><h3>El "riesgo" en el cálculo de n (pregunta conceptual real)</h3>
+<div class="note">El <b>riesgo</b> es la probabilidad de que el <b>error real de estimación SUPERE</b> el error máximo admisible. En símbolos: <b>Pr( |θ − ē| &gt; error máximo )</b>. <br>⚠️ NO es "que el error sea igual a 0" (eso fue una opción incorrecta del examen).</div>
 </div>
 </section>
 
@@ -344,12 +510,50 @@ a{color:var(--accent)}
 <div class="warn"><b>Criterio del valor crítico:</b> bilateral → comparás |z| con z<sub>1−α/2</sub>. Lateral → comparás z con z<sub>1−α</sub> (con su signo). Si supera el crítico hacia la zona de rechazo → rechazo H₀.</div>
 </div>
 
+<div class="card"><h3>⭐ Punto crítico del estimador y decisión (¡APARECIÓ EN EL EXAMEN!)</h3>
+<p>En vez de comparar el z, podés trabajar en la <b>escala del estimador (x̄)</b>. El <b>punto crítico x̄\*</b> es la frontera de la zona de rechazo:</p>
+<div class="fml">Lateral derecha: x̄\* = <b>μ₀ + z<sub>1−α</sub>·(σ/√n)</b></div>
+<div class="fml">Lateral izquierda: x̄\* = <b>μ₀ − z<sub>1−α</sub>·(σ/√n)</b></div>
+<div class="fml">Bilateral: x̄\* = <b>μ₀ ± z<sub>1−α/2</sub>·(σ/√n)</b> &nbsp;(dos puntos)</div>
+<div class="note"><b>Ejemplo real:</b> H₀: μ=10000, H₁: μ&gt;10000, n=64, σ=800, α=5%. <br>
+σ/√n = 800/8 = 100. x̄\* = 10000 + 1,645·100 = <b>10164,5</b>.<br>
+Como el x̄ observado (13250) <b>cae en la zona de rechazo</b> (13250 &gt; 10164,5) → <b>se rechaza H₀</b>.</div>
+<div class="warn"><b>Decisión por zona de rechazo:</b> "Rechazar H₀ porque el valor observado del estimador pertenece a la zona de rechazo". Recordá que la zona de rechazo está en la escala del <b>estimador (x̄)</b>, no del parámetro.</div>
+</div>
+
+<div class="card"><h3>⭐ Punto crítico para PROPORCIÓN (dócima lateral izquierda — apareció)</h3>
+<p>Mismo concepto pero con proporciones. El error estándar usa <b>P₀</b> (la proporción de H₀):</p>
+<div class="fml">Lateral izquierda: p̂\* = <b>P₀ − z<sub>1−α</sub>·√[ P₀(1−P₀)/n ]</b></div>
+<div class="fml">Lateral derecha: p̂\* = <b>P₀ + z<sub>1−α</sub>·√[ P₀(1−P₀)/n ]</b></div>
+<div class="note"><b>Ejemplo real:</b> "¿disminuyó la proporción que era al menos 25%?" → H₀: P≥0,25 ; H₁: P&lt;0,25 (lateral izquierda). n=600, α=5%.<br>
+√(0,25·0,75/600)=0,01768. p̂\* = 0,25 − 1,645·0,01768 = <b>0,2209</b>.<br>
+Observado: 180/600 = 0,30. Como 0,30 <b>NO es menor</b> que 0,2209 (cae en zona de No rechazo) → <b>NO se rechaza H₀</b>: no hay evidencia de que disminuyera (de hecho subió).</div>
+<div class="warn"><b>Ojo con la redacción de H₀/H₁:</b> "ha disminuido" → H₁: P&lt;valor (lateral izquierda). "ha aumentado" → H₁: P&gt;valor. La igualdad (≥ o ≤) va siempre en H₀, y se plantea sobre la proporción <b>poblacional</b> (no la muestral).</div>
+</div>
+
 <div class="card"><h3>Curva OC y función de potencia</h3>
 <p>La <b>Curva Característica de Operación (OC)</b> grafica <b>β</b> (probabilidad de NO rechazar H₀) para distintos valores reales del parámetro. La <b>función de potencia</b> grafica <b>1−β</b>. Sirven para ver qué tan bueno es el test según cuánto se aleja la realidad de H₀.</p>
 <div class="note"><b>Dócima ↔ IC:</b> son dos caras de lo mismo. Un IC de 95% contiene los valores de μ que NO se rechazarían en una dócima bilateral con α=0,05.</div>
-<details><summary>Ejemplo de potencia (del material)</summary>
-<p>Salarios, n=50, σ²=102,42 → σ²(x̄)=102,42/50=2,0484. Con μ₀=136 y α=5%, el punto crítico x̄*=138,354. Para μ=139,46 la potencia es 1−β = P(x̄ &gt; 138,354) = <b>0,7801</b>. Es decir, hay 78% de chance de detectar correctamente que la media real es mayor.</p></details>
+<h3>⭐ Cómo calcular la potencia paso a paso (apareció en el examen)</h3>
+<div class="steps">
+<div class="step">Calculás el <b>punto crítico x̄\*</b> (con μ₀ y α), como en la tarjeta de arriba.</div>
+<div class="step">Te dan un <b>μ real (alternativo)</b>. La potencia es la probabilidad de rechazar H₀ bajo ese μ real: <b>1−β = P(x̄ cae en zona de rechazo | μ real)</b>.</div>
+<div class="step">Estandarizás con el μ real: z = (x̄\* − μ<sub>real</sub>)/(σ/√n), y calculás esa probabilidad.</div>
 </div>
+<details><summary>Ejemplo real del examen (potencia)</summary>
+<p>H₀: μ=10000, H₁: μ&gt;10000, n=64, σ=800, α=5% → x̄\*=10164,5. Se pide la potencia para μ real = 10350.<br>
+σ/√n=100. z=(10164,5 − 10350)/100 = −1,855. <br>
+Potencia = P(x̄ &gt; 10164,5 | μ=10350) = P(z &gt; −1,855) = <b>0,9682</b> (≈97%). Alta potencia porque 10350 está lejos de 10000.</p></details>
+<details><summary>Otro ejemplo (del material, salarios)</summary>
+<p>n=50, σ²=102,42 → σ²(x̄)=102,42/50=2,0484. Con μ₀=136 y α=5%, x̄*=138,354. Para μ=139,46 la potencia es 1−β = P(x̄ &gt; 138,354) = <b>0,7801</b>.</p></details>
+</div>
+
+<div class="card"><h3>Conceptos de dócima que tomaron (V/F)</h3>
+<ul style="font-size:.92rem">
+<li>En el <b>gráfico bilateral</b> con dos puntos críticos: la zona de <b>No rechazo</b> está entre x̄₁\* y x̄₂\*; la zona de <b>Rechazo</b> son los extremos (valores del <b>estimador</b> menores a x̄₁\* o mayores a x̄₂\*). Los puntos críticos NO se calculan con las observaciones muestrales (salen de α).</li>
+<li>Los valores del estimador en la <b>zona de rechazo</b> se consideran con una <b>diferencia muy significativa</b> respecto del valor de H₀ (y por lo tanto, poco significativa respecto de un valor distinto al de H₀).</li>
+<li>"H₀ falsa" = el valor planteado tiene una diferencia <b>significativa</b> con el verdadero (no "poco significativa").</li>
+</ul></div>
 </section>
 
 <!-- ============ FLASHCARDS ============ -->
@@ -380,9 +584,9 @@ a{color:var(--accent)}
 <h2>📝 Simulacro de examen (con corrección)</h2>
 <div class="warn"><b>Modo examen:</b> poné <b>70 minutos</b> de reloj, calculadora + tabla Z/t (o Infostat) y resolvé sin mirar apuntes. Recién después abrí cada solución.</div>
 <div class="card" style="text-align:center">
-<div id="timer" style="font-size:2.2rem;font-weight:800;color:var(--accent)">70:00</div>
-<button class="opt" style="display:inline-block;width:auto;padding:8px 20px" onclick="startTimer()">▶ Iniciar reloj</button>
-<button class="opt" style="display:inline-block;width:auto;padding:8px 20px" onclick="stopTimer()">⏸ Pausar</button>
+<div id="timer" style="font-size:2.8rem;font-weight:700;color:var(--accent);margin-bottom:6px">70:00</div>
+<button onclick="startTimer()" style="display:inline-block;width:auto;padding:10px 22px;margin:4px;border:none;border-radius:12px;cursor:pointer;font-family:inherit;font-weight:700;font-size:.9rem;color:#041019;background:linear-gradient(120deg,var(--accent),var(--accent2));box-shadow:0 8px 22px -8px rgba(56,189,248,.7)">▶ Iniciar reloj</button>
+<button onclick="stopTimer()" style="display:inline-block;width:auto;padding:10px 22px;margin:4px;border:1px solid var(--line2);border-radius:12px;cursor:pointer;font-family:inherit;font-weight:600;font-size:.9rem;color:var(--ink);background:rgba(255,255,255,.05)">⏸ Pausar</button>
 </div>
 
 <div class="card"><h3>Ejercicio 1 — Normal (U6)</h3>
@@ -445,6 +649,187 @@ a) P(esperar más de 16 min). b) P(llegue en menos de 4 min). c) % que espera en
 <p><b>3)</b> z=(0,07−0,05)/√(0,05·0,95/400)=0,02/√(0,0475/400)=0,02/√0,00011875=0,02/0,0109=<b>1,835</b>.</p>
 <p><b>4)</b> Crítico lateral derecho: z<sub>0,95</sub>=1,645.</p>
 <p><b>5)</b> 1,835 &gt; 1,645 → <b>se rechaza H₀</b>. Al 5% hay evidencia de que la proporción de defectuosas supera el 5%.</p></details></div>
+
+<div class="card"><h3>Ejercicio 9 — Normal: percentil y P(|x−μ|) (estilo examen)</h3>
+<p>Salarios X ~ N(25,3 ; σ=3). a) ¿Salario que supera el 20% que más gana? b) P(|x−μ| ≤ 4).</p>
+<details><summary>Ver solución</summary>
+<p><b>a)</b> P(x&gt;k)=0,20 → z=0,8416 → k=25,3+0,8416·3=<b>27,82</b>.</p>
+<p><b>b)</b> 2·Φ(4/3)−1 = 2·0,9088−1 = <b>0,8176</b>.</p></details></div>
+
+<div class="card"><h3>Ejercicio 10 — Estratificado proporcional (estilo examen)</h3>
+<p>Población 33.600, muestra n=300. Estratos: 20%, 55%, 25%. ¿Cuántos de cada uno?</p>
+<details><summary>Ver solución</summary>
+<p>300·0,20=<b>60</b> · 300·0,55=<b>165</b> · 300·0,25=<b>75</b>. Suman 300 ✔️.</p></details></div>
+
+<div class="card"><h3>Ejercicio 11 — IC de proporción 98% (estilo examen)</h3>
+<p>n=100, 52 éxitos. IC del 98% para la proporción.</p>
+<details><summary>Ver solución</summary>
+<p>p̂=0,52. z₉₈%=2,326. ES=√(0,52·0,48/100)=0,04996.<br>IC=0,52±2,326·0,04996=<b>[0,4035 ; 0,6365]</b>.</p></details></div>
+
+<div class="card"><h3>Ejercicio 12 — Dócima: punto crítico, decisión y potencia (estilo examen)</h3>
+<p>μ₀=10000, "aumentó"; n=64, x̄=13250, σ=800, α=5%. a) Punto crítico. b) Decisión. c) Potencia para μ=10350.</p>
+<details><summary>Ver solución</summary>
+<p><b>a)</b> H₀:μ=10000, H₁:μ&gt;10000. x̄*=10000+1,645·(800/8)=<b>10164,5</b>.</p>
+<p><b>b)</b> 13250 &gt; 10164,5 → cae en zona de rechazo → <b>se rechaza H₀</b>.</p>
+<p><b>c)</b> z=(10164,5−10350)/100=−1,855 → potencia=P(z&gt;−1,855)=<b>0,9682</b>.</p></details></div>
+</section>
+
+<!-- ============ EXAMEN REAL ============ -->
+<section id="examen">
+<h2>📋 Análisis del examen real (2do Parcial 2K5 — 25/06/2026)</h2>
+<div class="note">Analicé el examen completo (formato <b>quiz de Moodle</b>, 15 preguntas, calificó 35%). Acá está <b>todo lo que tomaron</b>, con los ejercicios resueltos y verificados. Fijate que el examen es <b>mitad cálculo, mitad conceptual</b> (muchas de Verdadero/Falso y opción múltiple sobre el significado). Esos conceptos rinden muchísimo y son los que más se fallan.</div>
+
+<div class="card"><h3>🎯 Lo que MÁS pesó (priorizá esto)</h3>
+<table>
+<tr><th>Tema que apareció</th><th>Unidad</th><th>¿Lo tenías flojo?</th></tr>
+<tr><td>Normal: entre, &gt;, percentil inverso, P(|x−μ|≤k)</td><td>U6</td><td>P(|x−μ|) era nuevo ✅ agregado</td></tr>
+<tr><td>Estratificado afijación proporcional</td><td>U7</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>Poisson → Normal (μ=λ, σ=√λ)</td><td>U6/U7</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>IC proporción (z 98%=2,326)</td><td>U8</td><td>✅ ampliado</td></tr>
+<tr><td>Estimación puntual + IC desde datos</td><td>U8</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>Interpretación del nivel de confianza</td><td>U8</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>Ancho del IC vs confianza</td><td>U8</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>Punto crítico del estimador + decisión</td><td>U9</td><td>NUEVO ✅ agregado</td></tr>
+<tr><td>Potencia de la prueba (cálculo)</td><td>U9</td><td>✅ ampliado</td></tr>
+<tr><td>Conceptos: estimadores, dócimas, error vs n, riesgo</td><td>U8/U9</td><td>NUEVO ✅ agregado</td></tr>
+</table></div>
+
+<div class="card"><h3>P1 — Normal N(25,3 ; σ=3) (salarios por hora)</h3>
+<details><summary>Ver enunciado y solución completa</summary>
+<p><b>a) P(19,4 ≤ x ≤ 24,1):</b> z₁=(19,4−25,3)/3=−1,97 ; z₂=(24,1−25,3)/3=−0,40. <br>P = Φ(−0,40) − Φ(−1,97) = 0,3446 − 0,0246 = <b>0,3200</b>.</p>
+<p><b>b) El 20% que más gana → salario mayor a:</b> P(x&gt;k)=0,20 → P(x≤k)=0,80 → z=0,8416 → k=25,3+0,8416·3 = <b>27,82</b>.</p>
+<p><b>c) P(x &gt; 18,25):</b> z=(18,25−25,3)/3=−2,35 → P(x&gt;18,25)=Φ(2,35)= <b>0,9906</b>.</p>
+<p><b>d) P(|x−μ| ≤ 4):</b> = 2·Φ(4/3) − 1 = 2·0,9088 − 1 = <b>0,8176</b>.</p>
+<p style="color:var(--accent2)">💡 En Infostat: media 25,3, varianza 9. Para (b) usás el inverso (dejás x vacío, cargás 0,80).</p></details></div>
+
+<div class="card"><h3>P2 — Estratificado proporcional (censo 33.600, n=300)</h3>
+<details><summary>Ver solución</summary>
+<p>+40 años: 25%·300 = <b>75</b>. &nbsp; 18-25 años: 20%·300 = <b>60</b>. &nbsp; 26-40: 55%·300 = 165.</p></details></div>
+
+<div class="card"><h3>P3 — IC de proporción 98% (n=100, 52 éxitos)</h3>
+<details><summary>Ver solución</summary>
+<p>p̂=52/100=0,52. z₉₈%=2,326. Error estándar=√(0,52·0,48/100)=0,04996.<br>
+IC = 0,52 ± 2,326·0,04996 = 0,52 ± 0,1162 = <b>[0,4035 ; 0,6365]</b>.</p>
+<p><b>Conceptos:</b> un IC del 90% sería <b>más angosto</b> que el del 98% (menos confianza → más angosto, pero más riesgo). El coef. del 98% significa: "de cada 100 intervalos, 98 contienen el parámetro y 2 no".</p></details></div>
+
+<div class="card"><h3>P4 — Estimación de la media desde datos (50 vuelos)</h3>
+<details><summary>Ver solución</summary>
+<p><b>Estimación puntual</b> = promedio = <b>13,58</b> (Infostat: Medidas resumen).<br>
+<b>IC 90%</b> = <b>[11,63 ; 15,53]</b> (Infostat: Estimación de características poblacionales).<br>
+Interpretación 90%: de cada 100 intervalos, 90 contienen el parámetro.</p></details></div>
+
+<div class="card"><h3>P5 — Dócima de la media + punto crítico + potencia</h3>
+<details><summary>Ver solución</summary>
+<p>Plataforma: μ₀=10000, "aumentó" → H₀: μ=10000 ; H₁: μ&gt;10000. n=64, x̄=13250, σ=800, α=0,05.</p>
+<p><b>Punto crítico:</b> x̄\*=10000+1,645·(800/8)=<b>10164,5</b>.</p>
+<p><b>Decisión:</b> x̄=13250 &gt; 10164,5 → cae en zona de rechazo → <b>se rechaza H₀</b>.</p>
+<p><b>Potencia para μ=10350:</b> z=(10164,5−10350)/100=−1,855 → 1−β=P(z&gt;−1,855)= <b>0,9682</b>.</p></details></div>
+
+<div class="card"><h3>P6–P15 — Conceptuales (acá se ganan muchos puntos fáciles)</h3>
+<details><summary>Ver todas las respuestas correctas</summary>
+<ul style="font-size:.9rem">
+<li><b>P6 (t Student):</b> difiere de la Normal porque <b>su forma depende de los grados de libertad</b>. En muestras pequeñas permite: trabajar en estimación, considerar la incertidumbre adicional del muestreo, analizar variables continuas bajo ciertas condiciones.</li>
+<li><b>P7 (Poisson→Normal):</b> μ=λ y σ=√λ implican que el promedio de ocurrencias determina la ubicación y la dispersión depende del parámetro del modelo original.</li>
+<li><b>P8 (error vs n):</b> "a mayor n mayor error" → <b>FALSO</b>: a mayor n, <b>menor</b> el error.</li>
+<li><b>P9 (conglomerados):</b> el enunciado dado era <b>Falso</b> (se eligen conglomerados completos, no individuos como fracción).</li>
+<li><b>P10 (riesgo):</b> riesgo = P(|θ−ē| &gt; error máx admisible). La expresión Pr(|θ−ē|&gt;θ̂) es <b>incorrecta</b>.</li>
+<li><b>P11 (estimadores):</b> menor desviación = eficiente, NO insesgado (Falso). Para verificar E(θ̂)=θ se usan todas las muestras posibles de tamaño n.</li>
+<li><b>P12 (IC 95 vs 99):</b> el de 95% usa un <b>menor</b> valor del estadístico (Verdadero). La estimación puntual NO cambia con la confianza (por eso "mayor valor de la estimación puntual" es Falso).</li>
+<li><b>P13–P15 (dócima):</b> "H₀ falsa" implica diferencia <b>significativa</b>. La zona de rechazo es de valores del <b>estimador</b> (no del parámetro) con diferencia muy significativa respecto de H₀.</li>
+</ul></details></div>
+
+<div class="warn"><b>📌 Estrategia para subir la nota:</b> el examen tiene MUCHAS preguntas conceptuales (V/F y opción múltiple). Estudiá bien los conceptos de U8 y U9 (IC, estimadores, dócimas) — son puntos "fáciles" que se pierden por no tener clara la teoría. Lo de cálculo (Normal, estratificado, punto crítico, potencia) ya lo tenés resuelto acá.</div>
+
+<h2 style="margin-top:40px">📋 Modelo 2 de examen (otro compañero, 59%) — con pasos de InfoStat</h2>
+<div class="note">Segundo modelo real. Trae <b>cosas nuevas</b>: muestreo aleatorio con semilla, tamaño de muestra para proporción, error tolerable máximo y <b>dócima de proporción</b>. Abajo cada punto con su resolución y el <b>paso a paso de InfoStat</b>.</div>
+
+<div class="card"><h3>M2·P1 — Normal N(8500 ; σ=1200) (gasto en apuntes)</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p><b>a) P(x &lt; 6500):</b> z=(6500−8500)/1200=−1,67 → <b>0,0478</b>.</p>
+<p><b>b) P(7000 ≤ x ≤ 10000):</b> = Φ(1,25)−Φ(−1,25) = 0,8944−0,1056 = <b>0,7887</b> (78,87%).</p>
+<p><b>c) El 30% gasta menos de:</b> P(x≤k)=0,30 → z=−0,5244 → k=8500−0,5244·1200 = <b>7870,40</b>.</p>
+<div class="note">🖥️ <b>InfoStat:</b> Probabilidades y cuantiles → Normal, <b>media=8500, varianza=1.440.000</b> (=1200²). (a) y (b) con Valor de x; (c) inverso: Valor de x vacío, Prob.(X≤x)=0,30 → 7870,40.</div></details></div>
+
+<div class="card"><h3>M2·P2 — Muestreo aleatorio con semilla (todo en InfoStat)</h3>
+<details><summary>Ver pasos de InfoStat</summary>
+<p>Piden 8 muestras aleatorias simples <b>con reposición</b>, tamaño 5, <b>semilla 15</b>, y la media de cada una (las medias dieron 53,80 · 25,60 · 56,80 · 42,00 · 51,40 · 50,60 · 47,00 · 67,00).</p>
+<div class="note">🖥️ <b>InfoStat (paso a paso):</b><br>
+1) Cargá los 70 datos en una columna.<br>
+2) Si lo piden, Datos → Ordenar (descendente).<br>
+3) Fijá la <b>semilla = 15</b> en la herramienta de muestreo.<br>
+4) Generá <b>8 muestras</b> de <b>tamaño 5</b>, tildando <b>con reposición</b>.<br>
+5) Estadísticas → Medidas resumen → Media de cada muestra (2 decimales).<br>
+Ver el detalle completo en la pestaña <b>U7 → Muestreo aleatorio con semilla</b>.</div></details></div>
+
+<div class="card"><h3>M2·P3 — Tamaño de muestra, error máximo e IC de proporción</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p><b>a) n con 98% y error &lt;0,04</b> (sin dato de p → 0,5): n=2,326²·0,25/0,04² = <b>846</b>.</p>
+<p><b>b) Error máximo con n=300:</b> E=2,326·√(0,25/300)= <b>0,0671</b>.</p>
+<p><b>c) IC 98% con n=300, 75 éxitos</b> (p̂=0,25): 0,25±2,326·√(0,25·0,75/300) = <b>[0,1918 ; 0,3082]</b>.</p>
+<div class="note">🖥️ <b>InfoStat:</b> (a) Estadísticas → <b>Cálculo del tamaño muestral</b> → Proporción (confianza 0,98; error 0,04; p=0,5). (c) Estadísticas → <b>Estimación de características poblacionales → Proporción</b> (éxitos 75, n 300, confianza 0,98). El z del 98%=2,326 lo sacás del calculador (Normal estándar, inverso con 0,99).</div></details></div>
+
+<div class="card"><h3>M2·P4 — IC de proporción 95% (n=180, 126 éxitos)</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p>p̂=126/180=0,70. IC=0,70±1,96·√(0,70·0,30/180)= <b>[0,633 ; 0,767]</b>.</p>
+<p>Conceptos: un IC del 90% sería más angosto (menos confianza → más angosto, más riesgo). 95% significa "de cada 100 intervalos, 95 contienen el parámetro".</p>
+<div class="note">🖥️ <b>InfoStat:</b> Estimación de características poblacionales → Proporción (éxitos 126, n 180, confianza 0,95).</div></details></div>
+
+<div class="card"><h3>M2·P5 — Dócima de PROPORCIÓN (lateral izquierda) + punto crítico</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p>"¿Disminuyó la proporción sin barbijo, que era al menos 25%?" n=600, 180 sin barbijo (p̂=0,30), α=5%.</p>
+<p><b>a) Hipótesis:</b> H₀: P≥0,25 ; H₁: P&lt;0,25 (lateral izquierda; "disminuyó", sobre la proporción <b>poblacional</b>).</p>
+<p><b>b) Punto crítico:</b> p̂\*=0,25−1,645·√(0,25·0,75/600)= <b>0,2209</b>.</p>
+<p><b>c) Decisión:</b> p̂=0,30 NO es menor que 0,2209 → <b>NO se rechaza H₀</b>. No hay evidencia de disminución (las medidas no fueron efectivas).</p>
+<div class="note">🖥️ <b>InfoStat:</b> Estadísticas → <b>Inferencia basada en una muestra</b> → prueba para la proporción (P₀=0,25, n=600, éxitos=180, α=0,05, hipótesis lateral izquierda). Devuelve el punto crítico y la decisión.</div></details></div>
+
+<div class="card"><h3>M2 — Conceptuales nuevas que tomaron</h3>
+<details><summary>Ver respuestas correctas</summary>
+<ul style="font-size:.9rem">
+<li><b>Nivel de confianza (Falso):</b> NO es "la probabilidad de que el parámetro adopte cierto valor entre los límites". El parámetro es fijo; lo aleatorio es el intervalo.</li>
+<li><b>Valor de H₀ en zona de rechazo (Falso):</b> el valor planteado en H₀ <b>nunca</b> queda en la zona de rechazo (está en el centro de la zona de No rechazo).</li>
+<li><b>Error tipo I:</b> "rechazar la hipótesis nula cuando en realidad es cierta".</li>
+<li><b>Binomial → Normal:</b> para aproximar importan el <b>tamaño de muestra</b>, la <b>probabilidad de éxito</b> y que existan <b>condiciones adecuadas</b> de aproximación.</li>
+<li><b>Exponencial:</b> su función acumulada da la probabilidad hasta un tiempo; <b>no es simétrica</b> y se usa para <b>tiempos entre eventos</b>.</li>
+<li><b>Rechazar H₀ ⇒ "es falsa" (Falso):</b> rechazar es una decisión con riesgo α; no "prueba" con certeza que H₀ sea falsa.</li>
+</ul></details></div>
+
+<h2 style="margin-top:40px">📋 Modelo 3 — otros 5 exámenes (2K1, 2K11, 2025) con pasos de InfoStat</h2>
+<div class="note">De estos modelos saqué <b>temas nuevos</b>: las 3 afijaciones (con Neyman), la Exponencial a partir de una tasa, las 5 condiciones Z/t y "reducir el error a la mitad". Abajo los puntos distintivos resueltos.</div>
+
+<div class="card"><h3>M3·A — Estratificado: afijación igual, proporcional y Neyman</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p>360 profesionales. Técnicos(800,σ=7), Licenciados(600,σ=3), Ingenieros(400,σ=5).</p>
+<p><b>Igual:</b> 360/3 = <b>120</b> por estrato. <b>Proporcional</b> Técnicos: 360·800/1800 = <b>160</b>. <b>Neyman</b> Ingenieros: 360·(400·5)/9400 = <b>77</b>.</p>
+<div class="note">🖥️ <b>InfoStat:</b> es cálculo directo con las fórmulas (ver U7 → "3 tipos de afijación"). Neyman pondera por Nᵢ·σᵢ, así que el estrato más variable recibe más muestra.</div></details></div>
+
+<div class="card"><h3>M3·B — Exponencial a partir de una tasa (tiempo entre eventos)</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p>"16 faltas en 5 horas; ¿prob. de que pasen más de 2 h hasta la próxima?" tasa=16/5=3,2/h.</p>
+<p>P(x&gt;2) = e^(−2·3,2) = e^(−6,4) = <b>0,00166</b>.</p>
+<p>Otra variante: media μ=2 min → P(x&gt;4)=e^(−2)=0,1353 ; P(x&lt;3)=1−e^(−1,5)=0,7769.</p>
+<div class="note">🖥️ <b>InfoStat:</b> Probabilidades y cuantiles → Exponencial, <b>lambda = la tasa</b> (3,2), Valor de x=2 → leés Prob.(X&gt;x). (Recordá: cargás la tasa, no la media.)</div></details></div>
+
+<div class="card"><h3>M3·C — Dócima de la media LATERAL IZQUIERDA (mejorar = disminuir)</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p>"¿Mejoró (disminuyó) el tiempo de reparación de 17,2 días?" n=64, x̄=17,4, s=2,3, α=0,025. H₀: μ≥17,2 ; H₁: μ&lt;17,2.</p>
+<p><b>Punto crítico:</b> x̄\* = 17,2 − 1,96·(2,3/8) = <b>16,6</b>. Como x̄=17,4 NO es menor que 16,6 → <b>NO se rechaza H₀</b> (no hubo mejora).</p>
+<div class="note">🖥️ <b>InfoStat:</b> Inferencia basada en una muestra → prueba de la media, hipótesis <b>lateral izquierda</b>; devuelve el punto crítico y la potencia.</div></details></div>
+
+<div class="card"><h3>M3·D — Tamaño de muestra e IC de la media (99%)</h3>
+<details><summary>Ver solución + InfoStat</summary>
+<p><b>IC media 99%</b> (σ=12, n=65): margen = 2,576·12/√65 = 3,83 → [74,17 ; 81,83].</p>
+<p><b>Reducir el error a la mitad:</b> n se cuadruplica → de 65 pasás a <b>260</b>.</p>
+<div class="note">🖥️ <b>InfoStat:</b> Estimación de características poblacionales → Media (σ conocida → usa Z). Para el tamaño: Cálculo del tamaño muestral → Media.</div></details></div>
+
+<div class="card"><h3>M3·E — Conceptuales nuevas</h3>
+<details><summary>Ver respuestas correctas</summary>
+<ul style="font-size:.9rem">
+<li><b>5 condiciones para IC/dócima de media:</b> las determinan 3 factores → <b>tamaño de muestra, varianza (conocida/desconocida) y distribución (normal/no)</b>.</li>
+<li><b>IC de proporción 99%</b> (n=160, 40 éxitos): [0,162 ; 0,338], con error ≈ 0,088.</li>
+<li><b>Aproximación Binomial→Normal:</b> reemplaza, bajo ciertas condiciones, un cálculo discreto por uno continuo aproximado.</li>
+<li><b>Buen estimador:</b> se calcula con las n observaciones y <b>no usa el valor del parámetro</b>; es una <b>variable aleatoria</b>; su esperanza es igual al parámetro (insesgado).</li>
+<li><b>El valor de H₀ nunca queda en la zona de rechazo</b> (V/F → Falso que "nunca queda en la de NO rechazo").</li>
+</ul></details></div>
 </section>
 
 <!-- ============ FORMULARIO ============ -->
@@ -554,6 +939,36 @@ const FC=[
  ['U9','Estadístico de prueba para la media (σ conocida)','z=(x̄−μ₀)/(σ/√n)'],
  ['U9','Estadístico de prueba para proporción','z=(p̂−P₀)/√[P₀(1−P₀)/n]'],
  ['U9','Las 5 etapas de una dócima','1)H₀/H₁ 2)fijar α 3)estadístico 4)zona de rechazo 5)decidir y concluir.'],
+ ['U6','P(|x−μ| ≤ k) en una Normal','= 2·Φ(k/σ) − 1 (intervalo simétrico μ±k). Ej N(25,3;3), k=4 → 0,8176.'],
+ ['U6','Poisson aproximada por Normal: μ y σ','μ=λ y σ=√λ. El promedio de ocurrencias ubica la distribución.'],
+ ['U7','Estratificado afijación proporcional: nᵢ','nᵢ = n·(Nᵢ/N) = n × (% del estrato). Deben sumar n.'],
+ ['U7','¿A mayor n, mayor o menor error de muestreo?','MENOR. El error estándar es σ/√n: más muestra, más precisión.'],
+ ['U7','Muestreo por conglomerados: ¿qué se elige?','Se eligen al azar grupos/conglomerados COMPLETOS (ej. ciudades), no individuos.'],
+ ['U8','z para 98% de confianza (IC bilateral)','2,326'],
+ ['U8','¿Qué significa un nivel de confianza del 98%?','De cada 100 intervalos construibles, 98 contienen el parámetro y 2 no.'],
+ ['U8','Si bajo la confianza (98%→90%), el IC...','Es más ANGOSTO, pero con MAYOR riesgo de no contener el parámetro.'],
+ ['U8','¿La estimación puntual cambia con el nivel de confianza?','No. x̄ es la misma; solo cambia el estadístico (z/t) que la rodea.'],
+ ['U8','Menor desviación que otros estimadores → ¿insesgado?','NO, eso es EFICIENTE. Insesgado = E(θ̂)=θ.'],
+ ['U8','¿Qué es el "riesgo" al calcular n?','P(|θ−ē| > error máximo admisible). NO es que el error sea 0.'],
+ ['U9','Punto crítico del estimador (lateral derecha)','x̄* = μ₀ + z₁₋α·(σ/√n). Ej: 10000+1,645·100=10164,5.'],
+ ['U9','¿Cómo decido con el punto crítico?','Si el x̄ observado cae en la zona de rechazo (pasa el x̄*), rechazo H₀.'],
+ ['U9','Potencia para un μ real: ¿cómo se calcula?','1−β = P(x̄ en zona de rechazo | μ real). z=(x̄*−μreal)/(σ/√n).'],
+ ['U9','La zona de rechazo es de valores del...','ESTIMADOR (x̄), no del parámetro. Con diferencia muy significativa respecto de H₀.'],
+ ['U8','Error tolerable máximo E (proporción), dado n','E = z·√[p(1−p)/n]. Es despejar E de la fórmula de n.'],
+ ['U8','Tamaño de muestra proporción al 98%, E<0,04','n=z²·0,25/E²=2,326²·0,25/0,04²=846.'],
+ ['U9','Punto crítico para proporción (lateral izquierda)','p̂* = P₀ − z₁₋α·√[P₀(1−P₀)/n]. Ej: 0,25−1,645·0,01768=0,2209.'],
+ ['U9','"La proporción disminuyó" → ¿qué dócima?','Lateral izquierda: H₀:P≥valor, H₁:P<valor.'],
+ ['U8','¿El nivel de confianza es la prob. de que el parámetro tenga cierto valor?','NO (Falso). El parámetro es fijo; lo aleatorio es el intervalo.'],
+ ['U9','¿El valor de H₀ queda en la zona de rechazo?','Nunca. Está en el centro de la zona de NO rechazo.'],
+ ['U6','Aproximar Binomial por Normal: ¿qué importa?','El tamaño de muestra, la probabilidad de éxito y condiciones adecuadas de aproximación.'],
+ ['U7','Muestreo con semilla en InfoStat: ¿para qué la semilla?','Para que las muestras aleatorias sean reproducibles (mismo resultado siempre).'],
+ ['U7','Afijación IGUAL: nᵢ','n/k (k = nº de estratos). Mismo tamaño en cada estrato.'],
+ ['U7','Afijación PROPORCIONAL: nᵢ','n·(Nᵢ/N). Proporcional al peso de cada estrato.'],
+ ['U7','Afijación de NEYMAN: nᵢ','n·(Nᵢ·σᵢ)/Σ(Nⱼ·σⱼ). Pondera por tamaño Y variabilidad.'],
+ ['U6','Exponencial a partir de una tasa: P(x>t)','e^(−t·tasa)=e^(−t/μ), con μ=período/nº eventos. En Infostat lambda=la tasa.'],
+ ['U6','16 faltas en 5 h: P(que pasen más de 2 h)','tasa=3,2/h → e^(−2·3,2)=e^(−6,4)=0,00166.'],
+ ['U8','Las 5 condiciones (media): ¿qué 3 factores las determinan?','Tamaño de muestra, varianza (conocida/desconocida) y distribución (normal/no).'],
+ ['U8','Para reducir el error de estimación a la mitad, n...','se cuadruplica (n×4), porque n ∝ 1/E².'],
 ];
 let curDeck='all';
 function renderCards(list){
@@ -600,6 +1015,27 @@ const QZ=[
  ['U9','La potencia de una dócima es',['α','β','1−β','1−α'],2,'Potencia=1−β: probabilidad de rechazar H₀ cuando efectivamente es falsa.'],
  ['U9','Estadístico de prueba para la media con σ conocida',['(x̄−μ₀)/(σ/√n)','(x̄−μ₀)/σ','(p̂−P₀)/√(P₀q₀/n)','(x̄−μ₀)·√n'],0,'z=(x̄−μ₀)/(σ/√n).'],
  ['U9','En una dócima bilateral al 5% rechazo H₀ si',['z > 1,645','|z| > 1,96','z < 0','|z| < 1,96'],1,'Bilateral 5%: crítico ±1,96; rechazo si |z|>1,96.'],
+ ['U6','N(μ;σ). P(|x−μ| ≤ 4) con σ=3 equivale a',['Φ(4/3)','2·Φ(4/3) − 1','1 − Φ(4/3)','Φ(4)·2'],1,'Intervalo simétrico μ±k: P=2·Φ(k/σ)−1=2·Φ(1,333)−1=0,8176.'],
+ ['U6','Poisson aproximada por Normal tiene σ =',['λ','√λ','λ²','√(λ(1−λ))'],1,'En Poisson μ=λ y σ=√λ. La dispersión depende del parámetro original.'],
+ ['U7','Estratificado proporcional: n=300, estrato 25% → nᵢ=',['25','60','75','100'],2,'nᵢ=n·%=300·0,25=75. Los estratos deben sumar n=300.'],
+ ['U7','"A mayor tamaño de muestra, mayor error de muestreo"',['Verdadero','Falso, el error es menor','Falso, el error no cambia','Depende de σ'],1,'El error estándar σ/√n disminuye al crecer n. Más muestra = más precisión.'],
+ ['U8','El z para un IC de proporción del 98% es',['1,96','2,055','2,326','2,575'],2,'98% bilateral → α/2=0,01 → z=2,326.'],
+ ['U8','"Confianza 95%" significa que',['95 de cada 100 personas aciertan','de cada 100 intervalos, 95 contienen el parámetro','el error es del 5%','la media está al 95%'],1,'Interpretación frecuentista: 95 de cada 100 intervalos construibles contienen el parámetro.'],
+ ['U8','Comparado con uno del 99%, un IC del 90% es',['más ancho','más angosto','igual','no se puede comparar'],1,'Menos confianza → z menor → intervalo más angosto (pero más riesgo).'],
+ ['U8','Un estimador con menor desviación que otros es',['insesgado','eficiente','consistente','suficiente'],1,'Menor varianza entre los insesgados = eficiente. Insesgado es E(θ̂)=θ.'],
+ ['U9','Punto crítico (lateral der.): μ₀=10000, σ=800, n=64, α=5%',['10164,5','10131,6','9835,5','10800'],0,'x̄*=μ₀+z·σ/√n=10000+1,645·(800/8)=10000+164,5=10164,5.'],
+ ['U9','La zona de rechazo de una dócima contiene valores del',['parámetro','estimador','nivel de significación','error tipo II'],1,'Son valores del ESTIMADOR (x̄) con diferencia muy significativa respecto de H₀.'],
+ ['U9','"La proporción ha disminuido respecto del 25%" se plantea como',['H₀:P≤0,25 ; H₁:P>0,25','H₀:P≥0,25 ; H₁:P<0,25','H₀:P=0,25 ; H₁:P≠0,25','H₀:P<0,25 ; H₁:P≥0,25'],1,'"Disminuyó" → lateral izquierda. La igualdad (≥) va en H₀, sobre la proporción poblacional.'],
+ ['U9','Punto crítico (proporción, lateral izq.): P₀=0,25, n=600, α=5%',['0,2209','0,2808','0,2692','0,3000'],0,'p̂*=0,25−1,645·√(0,25·0,75/600)=0,25−1,645·0,01768=0,2209.'],
+ ['U8','n para proporción al 98% con error <0,04 (sin dato de p)',['480','846','1068','600'],1,'n=z²·0,25/E²=2,326²·0,25/0,04²=845,4→846 (p=0,5, peor caso).'],
+ ['U8','Con n=300 y 98%, el error tolerable máximo (p=0,5) es',['0,0250','0,0671','0,0152','0,0490'],1,'E=z·√(p(1−p)/n)=2,326·√(0,25/300)=0,0671.'],
+ ['U8','"El nivel de confianza es la prob. de que el parámetro tome cierto valor"',['Verdadero','Falso','Solo si n>30','Depende de α'],1,'Falso: el parámetro es fijo. La confianza se refiere a los intervalos, no al parámetro.'],
+ ['U9','El valor del parámetro de H₀ queda en la zona de rechazo',['Siempre','Nunca','Solo si se rechaza','Solo en bilateral'],1,'Nunca: el valor de H₀ está en el centro de la zona de NO rechazo.'],
+ ['U7','Afijación de Neyman: 360 total, Ingenieros N=400 σ=5 (den ΣNσ=9400)',['120','160','77','40'],2,'nᵢ=n·(Nᵢσᵢ)/ΣNσ=360·2000/9400=76,6→77. Neyman pondera tamaño y variabilidad.'],
+ ['U7','Afijación IGUAL con 360 y 3 estratos: cada estrato lleva',['160','120','77','90'],1,'Igual: n/k=360/3=120 por estrato.'],
+ ['U6','16 eventos en 5 h. P(pasen más de 2 h hasta el próximo)',['e^(−6,4)=0,00166','e^(−2)=0,135','0,32','1−e^(−6,4)'],0,'tasa=16/5=3,2/h → P(x>2)=e^(−2·3,2)=e^(−6,4)=0,00166.'],
+ ['U8','Para reducir a la MITAD el error de estimación, el n debe',['duplicarse','cuadruplicarse','reducirse a la mitad','no cambia'],1,'n ∝ 1/E²: mitad de error ⇒ 4 veces el n (ej. 65→260).'],
+ ['U8','Los 3 factores que definen las condiciones para IC de la media son',['media, moda y mediana','tamaño de muestra, varianza y distribución','α, β y potencia','n, N y σ únicamente'],1,'Tamaño de muestra, varianza (conocida/desconocida) y forma de la distribución (normal/no).'],
 ];
 const qb=document.getElementById('quizBox');
 let answered=0,correct=0;
